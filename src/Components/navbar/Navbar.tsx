@@ -8,7 +8,6 @@ const NavBarVariants = {
         opacity: 0, transition: {
             duration: 0.3,
             type: "spring", stiffness: 100
-
         },
         x: -1000
 
@@ -50,7 +49,8 @@ export default function Navbar() {
                     variants={navItemVariants}
                     initial="hidden"
                     animate="visible"
-                    transition={{ duration: 0.01, type: "spring", stiffness: 100, ease: "easeInOut", staggerChildren: 0.01, delayChildren: 0.01, when: "beforeChildren" }} className="nav-container bg-white h-16 md:h-20 w-full flex flex-row justify-between">
+                    transition={{ duration: 0.01, type: "spring", stiffness: 100, ease: "easeInOut", staggerChildren: 0.01, delayChildren: 0.01, when: "beforeChildren" }} 
+                    className="nav-container bg-white h-16 md:h-20 w-full flex flex-row justify-between">
                     <motion.div
                         className="md:w-1/3 flex flex-row">
                         <motion.img variants={navItemVariants} src="/assets/logo.jpeg" className="h-full md:ml-3 " alt="logo" />
