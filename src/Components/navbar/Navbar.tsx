@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const NavBarVariants = {
     hidden: {
         opacity: 0, transition: {
-            duration: 0.3,
+            duration: 0.5,
             type: "spring", stiffness: 100
         },
         x: -1000

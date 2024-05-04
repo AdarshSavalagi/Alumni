@@ -1,16 +1,17 @@
 'use client'
-import Navbar from "@/Components/navbar/Navbar";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-
+import Hero from "@/Components/home/Hero";
+import Container2 from "@/Components/home/Container2";
 export default function Home() {
 
   return (
-    <motion.div>
-      <Navbar/>
-      <div className="h-screen bg-slate-500"></div>
-      <div className="h-screen bg-red-500"></div>
-
+    <motion.div className="">
+      
+        <Hero/>
+      <main>
+    <Container2/>
+  
+      </main>
     </motion.div>
 
   );
