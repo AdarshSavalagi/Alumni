@@ -1,5 +1,6 @@
+'use client';
 import React, { useRef, useEffect, useState } from 'react';
-import { motion, useAnimationControls } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 const Container2Variants = {
