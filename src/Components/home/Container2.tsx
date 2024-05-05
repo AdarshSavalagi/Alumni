@@ -2,6 +2,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import useWindowSize from "@rooks/use-window-size";
+
 
 const Container2Variants = {
     hidden: { opacity: 0, transition: { duration: 0.7, type: 'spring', stiffness: 100 }, x: -1000 },
@@ -55,14 +57,12 @@ const Container2: React.FC = () => {
             container.style.scrollSnapType = 'none';
         }
     }, []);
-
-    const slideWidth = window.innerWidth;
+    const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
     const goToSlide = (slideIndex: number) => {
-        console.log('slideIndex', slideIndex);
         const container = containerRef.current;
         if (container) {
-            const slidePosition = slideIndex * slideWidth;
+            const slidePosition = slideIndex * innerWidth!;
             container.scrollTo({ left: slidePosition, behavior: 'smooth' });
             setState(slideIndex);
         }
