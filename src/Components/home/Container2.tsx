@@ -109,7 +109,7 @@ const Container2: React.FC = () => {
                         {data.description}</p>
                     </motion.div>)}
                 </motion.div>
-                <motion.div variants={Container2Variants} initial="hidden" animate={isInView ? 'visible' : 'hidden'} className="flex flex-row gap-4 w-10/12 mx-auto  justify-center align-middle">
+                <motion.div variants={Container2Variants} initial="hidden" animate={isInView ? 'visible' : 'hidden'} className="flex flex-row gap-4 md:gap-11 w-10/12 mx-auto  justify-center align-middle">
                     {data.map((data: any, index: number) => (
                         <div key={data.name} onClick={() => goToSlide(index)}>
                             <Card index={index} state={state} image={data.image} name={data.name} designation={data.designation} />
