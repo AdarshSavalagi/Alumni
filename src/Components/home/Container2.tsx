@@ -1,7 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { motion ,useInView} from 'framer-motion';
 import useWindowSize from "@rooks/use-window-size";
 
 
@@ -44,7 +43,8 @@ const data = [
 const Container2: React.FC = () => {
     const [state, setState] = useState(0);
     const ref = useRef<HTMLDivElement>(null);
-    const isInView = useInView({ root: ref.current });
+    
+    const isInView = useInView(ref );
 
     const containerRef = useRef<HTMLDivElement>(null);
 
