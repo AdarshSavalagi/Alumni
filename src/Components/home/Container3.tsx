@@ -22,7 +22,7 @@ export default function Container() {
                         <motion.p initial='hidden' variants={Container3Variants} animate={isInView?'visible':'hidden'} className="text-lg md:text-xl tracking-wide md:tracking-wider md:mx-9">
                             For all who leave the Hilltop but whom the Hilltop never leaves, this is our creed. We are bold, curious and creative individuals who are driven to think big and do good. We are courageous changemakers who work hard, play hard and strive to make the world a better place.
                         </motion.p>
-                        <button className="btn bg-black px-4 py-2 rounded-md text-white md:mx-9 md:w-64 md:text-xl">View Our Alumni's</button>
+                        <button className="btn bg-black px-4 py-2 rounded-md text-white md:mx-9 md:w-64 md:text-xl">View Our Alumni&apos;s</button>
                         <div></div>
                     </div>
                 </div>
