@@ -14,11 +14,11 @@ export default function Home() {
       <Hero />
       <main>
         <Container2 />
-        <HrTag/>
+        <HrTag />
         <Container3 />
-        <HrTag/>
-        <Container5/>
-      <NewsCard/>
+        <Container5 />
+        <HrTag />
+        <NewsCard />
       </main>
     </motion.div>
 

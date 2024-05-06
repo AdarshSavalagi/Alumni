@@ -54,7 +54,7 @@ export default function Navbar() {
                     <motion.div
                         className="md:w-1/3 flex flex-row">
                         <motion.img variants={navItemVariants} src="/assets/logo.jpeg" className="h-full md:ml-3 " alt="logo" />
-                        <motion.p variants={navItemVariants} className="text-xl font-bold my-auto  text-center">Srinivas Institute <br /> of Technology</motion.p>
+                        <motion.p variants={navItemVariants} className="text-xl poppins-bold my-auto  text-center">Srinivas Institute <br /> of Technology</motion.p>
                     </motion.div>
                     <div className="w-2/3 hidden md:block my-auto">
                         <ul className="flex flex-row justify-around h-full ">
