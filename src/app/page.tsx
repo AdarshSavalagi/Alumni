@@ -16,6 +16,7 @@ export default function Home() {
         <Container2 />
         <HrTag />
         <Container3 />
+        <HrTag />
         <Container5 />
         <HrTag />
         <NewsCard />
