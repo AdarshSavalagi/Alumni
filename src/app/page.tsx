@@ -10,7 +10,6 @@ export default function Home() {
 
   return (
     <motion.div className="">
-
       <Hero />
       <main>
         <Container2 />
@@ -22,6 +21,5 @@ export default function Home() {
         <NewsCard />
       </main>
     </motion.div>
-
   );
 }
