@@ -78,7 +78,7 @@ const Container2: React.FC = () => {
                     initial="hidden"
                     className="text-3xl font-normal md:font-semibold text-black  mb-3 text-center md:text-5xl md:text-left md:ml-24"
                 >
-                    Our Presidents
+                    Our Esteemed Management
                 </motion.h1>
                 <div className="md:hidden mx-auto w-full flex flex-col items-center">
                     <motion.img
