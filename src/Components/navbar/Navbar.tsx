@@ -63,7 +63,8 @@ export default function Navbar() {
                             <motion.li variants={navItemVariants} whileHover='hover' className="my-auto"><Link href="/">Program & Event</Link></motion.li>
                             <motion.li variants={navItemVariants} whileHover='hover' className="my-auto"><Link href="/">College</Link></motion.li>
                             <motion.li variants={navItemVariants} whileHover='hover' className="my-auto"><Link href="/">About Us</Link></motion.li>
-                            <li ><motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md border-black border px-5 mr-3">Sign In</motion.button>
+                            <li >
+                                <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md border-black border px-5 mr-3">Sign In</motion.button>
                                 <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md bg-black text-white">Join Now</motion.button></li>
                         </ul>
                     </div>

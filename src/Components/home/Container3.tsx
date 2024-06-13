@@ -1,7 +1,7 @@
 'use client'
 import {motion,useInView} from "framer-motion";
 import { useRef } from "react";
-
+import Image from "next/image";
 const Container3Variants = {
     hidden: { opacity: 0, transition: { duration: 0.7, type: 'spring', stiffness: 100 }, x: -1000 },
     visible: { opacity: 1, transition: { duration: 0.6, ease: 'easeInOut', staggerChildren: 0.1, delayChildren: 0.1 }, x: 0 },
@@ -13,8 +13,10 @@ export default function Container() {
 
     return (
         <section >
-            <div className="h-[90vh] w-full flex flex-row ">
-                <div className="w-full md:w-3/5 hidden md:block">illi image barutte</div>
+            <div className="h-[90vh] w-full flex flex-row  ">
+                <div className="w-full md:w-3/5 hidden md:block m-auto">
+                    <Image src={"/assets/alumni.png"} alt={"Alumni png"} className="mx-auto" width={500} height={600} />
+                </div>
                 <div className="w-full md:w-2/5  h-screen">
                     <div className="w-10/12 md:w-full mx-auto flex flex-col justify-around h-screen" ref={ref}>
                         <div></div>
