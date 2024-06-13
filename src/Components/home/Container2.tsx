@@ -19,20 +19,41 @@ const data = [
     },
     {
         name: 'Person 2',
+        designation: 'President',
+        image: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
+        description:
+            '1 Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !',
+    },
+    {
+        name: 'Person 3',
         designation: 'Principal',
         image: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
         description:
             '2 Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !',
     },
     {
-        name: 'Person 3',
+        name: 'Person 4',
         designation: 'Chancellor',
         image: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
         description:
             '3 Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !',
     },
     {
-        name: 'Person 4',
+        name: 'Person 5',
+        designation: 'Vice President',
+        image: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
+        description:
+            '4 Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !',
+    },
+    {
+        name: 'Person 6',
+        designation: 'Vice President',
+        image: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
+        description:
+            '4 Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !',
+    },
+    {
+        name: 'Person 7',
         designation: 'Vice President',
         image: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
         description:
@@ -127,14 +148,14 @@ function Card(props: any) {
     if (props.index !== props.state) {
         return (
             <motion.div initial="hidden" whileInView="visible" animate="visible" variants={Container2Variants} className=" bg-black p-1 rounded-full md:my-2">
-                <img src={props.image} alt={props.name} className="w-12 h-12 rounded-full" />
+                <img src={props.image} alt={props.name} className="md:w-12 md:h-12 h-8 w-8 rounded-full" />
             </motion.div>
         );
     } else
         return (
             <>
                 <motion.div initial="hidden" whileInView="visible" animate="visible" variants={Container2Variants} className="flex flex-row bg-black p-1 md:px-4 rounded-full md:rounded-lg md:py-3">
-                    <img src={props.image} alt={props.name} className="w-12 h-12 rounded-full md:mr-3" />
+                    <img src={props.image} alt={props.name} className="md:w-12 md:h-12 h-8 w-8 rounded-full md:mr-3" />
                     <div className="hidden md:block">
                         <div className="flex flex-col  ">
                             <h1 className="text-lg font-semibold text-white">{props.name}</h1>
