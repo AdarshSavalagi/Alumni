@@ -23,7 +23,6 @@ const testimonialsData = [
       testimonial: 'Fantastic experience, very professional and efficient.',
       image: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp',
     },
-    // Add more testimonials here
   ]
 
 export default function OfficeBearers() {
@@ -76,7 +75,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ testimonials }) => {
             <div className="flex flex-col md:flex-row items-center bg-white p-6 rounded-lg shadow-xl">
               <img src={testimonial.image} alt={testimonial.name} className="w-24 h-24 rounded-full md:mr-6 mb-4 md:mb-0" />
               <div className="text-center md:text-left">
-                <p className="text-xl italic mb-4">"{testimonial.testimonial}"</p>
+                <p className="text-xl italic mb-4">&apos;{testimonial.testimonial}&apos;</p>
                 <h3 className="text-2xl font-semibold">{testimonial.name}</h3>
                 <p className="text-gray-600">{testimonial.position}</p>
               </div>
