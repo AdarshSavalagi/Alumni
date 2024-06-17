@@ -7,62 +7,61 @@ import HrTag from "@/Components/components/HrTag";
 import Testimonials from "@/Components/home/Testimonials";
 import OfficeBearers from "@/Components/home/OfficeBearers";
 
-const testis=[
+const testis = [
   {
-    name:'Name 1',
-    role:"student",
-    avatar:"https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
-    "text":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
-    rating:3
+    name: 'Name 1',
+    role: "student",
+    avatar: "https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
+    rating: 3
   }, {
-    name:'Name 2',
-    role:"student",
-    avatar:"https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
-    "text":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
-    rating:3
+    name: 'Name 2',
+    role: "student",
+    avatar: "https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
+    rating: 3
   }, {
-    name:'Name 3',
-    role:"student",
-    avatar:"https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
-    "text":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
-    rating:3
+    name: 'Name 3',
+    role: "student",
+    avatar: "https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
+    rating: 3
   }, {
-    name:'Name 4',
-    role:"student",
-    avatar:"https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
-    "text":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
-    rating:3
+    name: 'Name 4',
+    role: "student",
+    avatar: "https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
+    rating: 3
   }, {
-    name:'Name 5',
-    role:"student",
-    avatar:"https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
-    "text":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
-    rating:3
+    name: 'Name 5',
+    role: "student",
+    avatar: "https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
+    rating: 3
   }, {
-    name:'Name 6',
-    role:"student",
-    avatar:"https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
-    "text":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
-    rating:3
-  },{
-    name:'Name 7',
-    role:"student",
-    avatar:"https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
-    "text":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
-    rating:3
+    name: 'Name 6',
+    role: "student",
+    avatar: "https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
+    rating: 3
+  }, {
+    name: 'Name 7',
+    role: "student",
+    avatar: "https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio? Officia delectus perspiciatis, expedita ea dolorum totam optio hic Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quas ipsum quos ipsa optio?  !",
+    rating: 3
   },
 ];
 
 export default function Home() {
   return (
-    <motion.div className="overflow-y-hidden">
+    <motion.div>
       <Hero />
       <main>
         <Container2 />
         <HrTag />
-        <OfficeBearers/>
-        
-        <Testimonials testimonials={testis}/>
+        <OfficeBearers />
+        <Testimonials testimonials={testis} />
         <HrTag />
         <Container3 />
       </main>
