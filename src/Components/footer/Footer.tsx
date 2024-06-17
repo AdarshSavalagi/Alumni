@@ -1,16 +1,27 @@
 'use client';
 import { IconFacebook, IconTwitterSquare, IconInstagram, IconYoutube, IconSquareWhatsapp } from "../FooterIcons/Icons";
 import Link from "next/link";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 
-const navLinks={
-    initial:{
-        scale:1
+const navLinks = {
+    initial: {
+        scale: 1
     },
-    hover:{
-        scale:1.1,
+    hover: {
+        scale: 1.1,
     }
 }
+
+const socialIcons = [
+    { Icon: IconYoutube },
+    { Icon: IconInstagram },
+    { Icon: IconTwitterSquare },
+    { Icon: IconFacebook },
+    { Icon: IconSquareWhatsapp },
+];
+
+const footerLinks = ["About Us", "Giving", "Gallery", "Team"];
+
 
 export default function Footer() {
 
@@ -21,11 +32,9 @@ export default function Footer() {
                     <div className="w-full text-center my-6 flex flex-row">
                         <div className="w-1/3">&nbsp;</div>
                         <div className="flex flex-row justify-between md:justify-evenly w-2/3 md:w-1/3 " >
-                            <motion.span variants={navLinks} whileHover='hover'><IconYoutube /></motion.span>
-                            <motion.span variants={navLinks} whileHover='hover'><IconInstagram /></motion.span>
-                            <motion.span variants={navLinks} whileHover='hover'><IconTwitterSquare /></motion.span>
-                            <motion.span variants={navLinks} whileHover='hover'><IconFacebook /></motion.span>
-                            <motion.span variants={navLinks} whileHover='hover'><IconSquareWhatsapp /></motion.span>
+                            {socialIcons.map(({ Icon }, index) => (
+                                <motion.span key={index} variants={navLinks} whileHover='hover'><Icon /></motion.span>
+                            ))}
                         </div>
                         <div className="w-1/3">&nbsp;</div>
                     </div>
@@ -34,11 +43,11 @@ export default function Footer() {
                         <div className="w-full content-center">
                             <nav>
                                 <ul className="flex flex-row justify-between text-center">
-                                    <motion.li variants={navLinks} whileHover="hover"><Link href="/">About Us</Link></motion.li>
-                                    <motion.li variants={navLinks} whileHover="hover"><Link href="/">Giving</Link></motion.li>
-                                    <motion.li variants={navLinks} whileHover="hover"><Link href="/">Gallery</Link></motion.li>
-                                    <motion.li variants={navLinks} whileHover="hover"><Link href="/">Team</Link></motion.li>
-                                </ul>
+                                    {footerLinks.map((link, index) => (
+                                        <motion.li key={index} variants={navLinks} whileHover="hover">
+                                            <Link href="/">{link}</Link>
+                                        </motion.li>
+                                    ))} </ul>
                             </nav>
                         </div>
                         <div className=" text-center md:text-end my-3 md:w-2/3">
