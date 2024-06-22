@@ -6,6 +6,7 @@ import Container3 from "@/Components/home/Container3";
 import HrTag from "@/Components/components/HrTag";
 import Testimonials from "@/Components/home/Testimonials";
 import OfficeBearers from "@/Components/home/OfficeBearers";
+import NewsComponent from '@/Components/home/Newscomponents/NewsComponent';
 
 const testis = [
   {
@@ -59,11 +60,12 @@ export default function Home() {
       <Hero />
       <main>
         <Container2 />
-        <HrTag />
         <OfficeBearers />
-        <Testimonials testimonials={testis} />
         <HrTag />
         <Container3 />
+        <NewsComponent/>
+        <Testimonials testimonials={testis} />
+   
       </main>
     </motion.div>
   );
