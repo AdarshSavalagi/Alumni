@@ -6,7 +6,7 @@ import Container3 from "@/Components/home/Container3";
 import HrTag from "@/Components/components/HrTag";
 import Testimonials from "@/Components/home/Testimonials";
 import OfficeBearers from "@/Components/home/OfficeBearers";
-import NewsComponent from '@/Components/home/NewsComponent';
+import NewsComponent from '@/Components/home/Newscomponents/NewsComponent';
 
 const testis = [
   {
