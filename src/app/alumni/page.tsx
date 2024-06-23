@@ -37,7 +37,7 @@ const departments = ['', 'Computer Science', 'Mechanical Engineering', 'Electric
 
 const StudentCard: React.FC<Student> = ({ name, batch, department, photo }) => (
     <motion.div
-        className="border rounded-lg p-4 m-2 w-64"
+        className="border rounded-lg p-4 m-2 md:w-64 w-10/12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
@@ -93,7 +93,7 @@ const AlumniPage: React.FC = () => {
                         </select>
                     </label>
                 </div>
-                <div className="flex flex-wrap -mx-2 justify-center">
+                <div className="flex flex-wrap md:-mx-2 justify-center">
                     {filteredStudents.map((student, index) => (
                         <StudentCard key={index} {...student} />
                     ))}
