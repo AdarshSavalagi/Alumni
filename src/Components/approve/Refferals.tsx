@@ -2,16 +2,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
+import { ReferralRequest } from '@/types/Refferals';
 
-interface ReferralRequest {
-  id: number;
-  name: string;
-  position: string;
-  company: string;
-  studentBatch: string;
-  optionalMessage?: string;
-  status: 'Pending' | 'Read' | 'Approved';
-}
+
 
 const initialRequests: ReferralRequest[] = [
   { id: 1, name: 'John Doe', position: 'Software Engineer', company: 'Google', studentBatch: '2021', status: 'Pending', optionalMessage: 'Looking forward to great candidates!' },

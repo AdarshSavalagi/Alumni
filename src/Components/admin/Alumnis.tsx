@@ -1,12 +1,7 @@
 'use client';
+import { Alumni } from '@/types/Alumni';
 import React, { useState, useEffect } from 'react';
 
-interface Alumni {
-    name: string;
-    batch: number;
-    department: string;
-    photo: string;
-}
 
 const EditModal: React.FC<{
     data: Alumni;

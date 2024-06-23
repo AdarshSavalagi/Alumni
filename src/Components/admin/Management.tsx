@@ -1,12 +1,8 @@
 'use client';
-import React, { useState } from 'react';
-
-interface ManagementPerson {
-    name: string;
-    avatar: string;
-    designation: string;
-    message: string;
-}
+import { ManagementPerson } from '@/types/Management';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const EditModal: React.FC<{
     data: ManagementPerson;
@@ -14,7 +10,7 @@ const EditModal: React.FC<{
     onClose: () => void;
 }> = ({ data, onSave, onClose }) => {
     const [editData, setEditData] = useState<ManagementPerson>(data);
-    const [photoPreview, setPhotoPreview] = useState<string>(data.avatar);
+    const [photoPreview, setPhotoPreview] = useState<string>(data.image);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -29,10 +25,11 @@ const EditModal: React.FC<{
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setPhotoPreview(reader.result as string);
+                const base64String = reader.result as string;
+                setPhotoPreview(base64String);
                 setEditData(prevState => ({
                     ...prevState,
-                    avatar: reader.result as string
+                    image: base64String
                 }));
             };
             reader.readAsDataURL(file);
@@ -45,39 +42,39 @@ const EditModal: React.FC<{
                 <h2 className='text-xl font-bold mb-4'>Edit Management Data</h2>
                 <label className='block mb-2'>
                     Name:
-                    <input 
-                        type="text" 
-                        name="name" 
-                        value={editData.name} 
-                        onChange={handleChange} 
+                    <input
+                        type="text"
+                        name="name"
+                        value={editData.name}
+                        onChange={handleChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
                 <label className='block mb-2'>
                     Designation:
-                    <input 
-                        type="text" 
-                        name="designation" 
-                        value={editData.designation} 
-                        onChange={handleChange} 
+                    <input
+                        type="text"
+                        name="designation"
+                        value={editData.designation}
+                        onChange={handleChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
                 <label className='block mb-2'>
                     Message:
-                    <textarea 
-                        name="message" 
-                        value={editData.message} 
-                        onChange={handleChange} 
+                    <textarea
+                        name="message"
+                        value={editData.message}
+                        onChange={handleChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
                 <label className='block mb-2'>
                     Photo:
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handlePhotoChange} 
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
@@ -96,46 +93,7 @@ const EditModal: React.FC<{
 };
 
 const ManagementData: React.FC = () => {
-    const initialData: ManagementPerson[] = [
-        {
-            name: 'Principal',
-            avatar: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp',
-            designation: 'Dr. Shrinivasa Mayya D',
-            message: 'Welcome to our institution!'
-        },
-        {
-            name: 'Vice Principal',
-            avatar: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp',
-            designation: 'Dr. Shrinivasa Mayya D',
-            message: 'Committed to excellence in education.'
-        },
-        {
-            name: 'HOD',
-            avatar: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp',
-            designation: 'Dr. Shrinivasa Mayya D',
-            message: 'Leading our department with pride.'
-        },
-        {
-            name: 'Registrar',
-            avatar: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp',
-            designation: 'Dr. Shrinivasa Mayya D',
-            message: 'Ensuring smooth administration.'
-        },
-        {
-            name: 'Placement Officer',
-            avatar: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp',
-            designation: 'Dr. Shrinivasa Mayya D',
-            message: 'Connecting students with opportunities.'
-        },
-        {
-            name: 'Dean',
-            avatar: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp',
-            designation: 'Dr. Shrinivasa Mayya D',
-            message: 'Fostering academic growth.'
-        },
-    ];
-
-    const [managementData, setManagementData] = useState<ManagementPerson[]>(initialData);
+    const [managementData, setManagementData] = useState<ManagementPerson[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [currentEditData, setCurrentEditData] = useState<ManagementPerson | null>(null);
 
@@ -144,17 +102,30 @@ const ManagementData: React.FC = () => {
         setIsModalOpen(true);
     };
 
-    const handleSave = (updatedData: ManagementPerson) => {
-        setManagementData(prevData =>
-            prevData.map(item => item.name === updatedData.name ? updatedData : item)
-        );
-        setIsModalOpen(false);
+    const handleSave = async (updatedData: ManagementPerson) => {
+        try {
+            if (managementData.some(person => person.name === updatedData.name)) {
+                await axios.put(`/api/v1/management?name=${updatedData.name}`, updatedData);
+                setManagementData(prevData =>
+                    prevData.map(item => item.name === updatedData.name ? updatedData : item)
+                );
+                toast.success('Management data updated successfully');
+            } else {
+                await axios.post('/api/v1/management', updatedData);
+                setManagementData(prevData => [...prevData, updatedData]);
+                toast.success('New management data added successfully');
+            }
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Error saving data:', error);
+            toast.error('Failed to save data');
+        }
     };
 
     const handleAdd = () => {
         const newEntry: ManagementPerson = {
             name: '',
-            avatar: '',
+            image: '',
             designation: '',
             message: ''
         };
@@ -162,13 +133,34 @@ const ManagementData: React.FC = () => {
         setIsModalOpen(true);
     };
 
-    const handleDelete = (name: string) => {
-        setManagementData(prevData => prevData.filter(item => item.name !== name));
+    const handleDelete = async (name: string) => {
+        try {
+            await axios.delete(`/api/v1/management/?name=${name}`);
+            console.log(`/api/v1/management/?name=${name}`)
+            setManagementData(prevData => prevData.filter(item => item.name !== name));
+            toast.success('Management data deleted successfully');
+        } catch (error) {
+            console.error('Error deleting data:', error);
+            toast.error('Failed to delete data');
+        }
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<ManagementPerson[]>('/api/v1/management');
+                setManagementData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                toast.error('Error fetching data');
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <div className='overflow-y-hidden p-4'>
@@ -177,19 +169,19 @@ const ManagementData: React.FC = () => {
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 {managementData.map((data, index) => (
                     <div key={index} className='flex flex-col items-center justify-center m-3 p-3 shadow-lg rounded-lg'>
-                        <img src={data.avatar} alt={data.name} className='rounded-full w-24 h-24' />
+                        <img src={data.image} alt={data.name} className='rounded-full w-24 h-24' />
                         <div className='font-bold text-md mt-2'>{data.name}</div>
                         <p className='text-lg'>{data.designation}</p>
                         <p className='text-sm text-gray-500 text-center'>{data.message}</p>
                         <div className='flex'>
-                            <button 
-                                onClick={() => handleEditClick(data)} 
+                            <button
+                                onClick={() => handleEditClick(data)}
                                 className='mt-2 bg-blue-500 text-white p-2 rounded mr-2'
                             >
                                 Edit
                             </button>
-                            <button 
-                                onClick={() => handleDelete(data.name)} 
+                            <button
+                                onClick={() => handleDelete(data.name)}
                                 className='mt-2 bg-red-500 text-white p-2 rounded'
                             >
                                 Delete
@@ -199,10 +191,10 @@ const ManagementData: React.FC = () => {
                 ))}
             </div>
             {isModalOpen && currentEditData && (
-                <EditModal 
-                    data={currentEditData} 
-                    onSave={handleSave} 
-                    onClose={handleCloseModal} 
+                <EditModal
+                    data={currentEditData}
+                    onSave={handleSave}
+                    onClose={handleCloseModal}
                 />
             )}
         </div>

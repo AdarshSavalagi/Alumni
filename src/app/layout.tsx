@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/Components/footer/Footer";
 import Navbar from "@/Components/navbar/Navbar";
+import {Toaster} from 'react-hot-toast';
 const inter = Inter({ subsets: ["latin"] });
 
 
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body className={inter.className} >
         <div className="h-screen overflow-y-auto scrollbar-thin" id="body">
           <Navbar />
+          <Toaster />
           {children}
           <Footer />
         </div>

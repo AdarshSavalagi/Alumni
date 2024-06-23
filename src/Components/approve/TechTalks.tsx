@@ -2,16 +2,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
+import { TechTalkRequest } from '@/types/TechTalk';
 
-interface TechTalkRequest {
-  id: number;
-  name: string;
-  topic: string;
-  date: string;
-  studentBatch: string;
-  optionalMessage?: string;
-  status: 'Pending' | 'Read' | 'Approved';
-}
+
 
 const initialRequests: TechTalkRequest[] = [
   { id: 1, name: 'Alice', topic: 'React Hooks', date: '2024-07-01', studentBatch: '2021', status: 'Pending', optionalMessage: 'Excited to share!' },

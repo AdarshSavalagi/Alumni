@@ -2,15 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
-
-interface Referral {
-  id: number;
-  name: string;
-  company: string;
-  position: string;
-  description: string;
-  date: string;
-}
+import { Referral } from '@/types/Refferals';
 
 const initialReferrals: Referral[] = [
   { id: 1, name: 'John Doe', company: 'TechCorp', position: 'Software Engineer', description: 'Looking for skilled developers in JavaScript and React.', date: '2024-06-01' },

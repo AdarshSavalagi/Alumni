@@ -2,23 +2,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
+import { TechTalk } from '@/types/TechTalk';
 
-interface TechTalk {
-  id: number;
-  name: string;
-  topic: string;
-  date: string;
-}
-
-const initialTechTalks: TechTalk[] = [
-  { id: 1, name: 'Alice', topic: 'React Hooks', date: '2024-07-01' },
-  { id: 2, name: 'Bob', topic: 'TypeScript Tips', date: '2024-07-15' },
-  { id: 3, name: 'Carol', topic: 'Framer Motion', date: '2024-08-01' },
-  // Add more tech talks as needed
-];
 
 const TechTalksGrid: React.FC = () => {
-  const [techTalks, setTechTalks] = useState(initialTechTalks);
+  const [techTalks, setTechTalks] = useState<TechTalk[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTalk, setSelectedTalk] = useState<TechTalk | null>(null);
 

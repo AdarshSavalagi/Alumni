@@ -2,18 +2,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
+import { AlumniRegistrationRequest } from '@/types/Alumni';
 
-interface AlumniRegistrationRequest {
-  id: number;
-  batch: string;
-  usn: string;
-  name: string;
-  linkedId: string;
-  testimonials: string;
-  ratings: number;
-  currentCompany?: string;
-  status: 'Pending' | 'Read' | 'Approved';
-}
+
 
 const initialRequests: AlumniRegistrationRequest[] = [
   { id: 1, batch: '2020', usn: 'A123456', name: 'Alice Smith', linkedId: 'alice.smith', testimonials: 'Great experience at university!', ratings: 5, status: 'Pending', currentCompany: 'TechCorp' },

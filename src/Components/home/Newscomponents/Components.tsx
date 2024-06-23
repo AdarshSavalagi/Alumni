@@ -1,26 +1,11 @@
+import { CareerType } from "@/types/Career";
+import { NewsDataType } from "@/types/NewsData";
+import { TechTalk } from "@/types/TechTalk";
 import React from "react";
 
-export interface NewsDataType {
-    id: number;
-    title: string;
-    message: string;
-    date: string;
-    imageUrl: string;
-}
 
-export interface CareerType {
-    id: number;
-    companyName: string;
-    message: string;
-    date: string;
-}
 
-export interface TechTalkType {
-    id: number;
-    title: string;
-    message: string;
-    date: string;
-}
+
 
 export const NewsCard: React.FC<NewsDataType> = ({ imageUrl, title, date, message }) => {
     return (
@@ -48,13 +33,13 @@ export const CareerCard: React.FC<CareerType> = ({ message, date, companyName })
     );
 };
 
-export const TechTalkCard: React.FC<TechTalkType> = ({ title, message, date }) => {
+export const TechTalkCard: React.FC<TechTalk> = ({ name, topic, date }) => {
     return (
         <div className="w-11/12 mx-auto bg-white shadow-md rounded-lg overflow-hidden mb-3">
             <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-800">{title || 'Title not available'}</h3>
+                <h3 className="text-xl font-semibold text-gray-800">{name || 'Title not available'}</h3>
                 <p className="text-gray-600 text-sm mt-2">{date || 'Date not available'}</p>
-                <p className="text-gray-700 mt-4">{message || 'Message not available'}</p>
+                <p className="text-gray-700 mt-4">{topic || 'Topic not available'}</p>
             </div>
         </div>
     );
