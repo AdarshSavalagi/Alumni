@@ -16,7 +16,6 @@ export async function GET(req: NextRequest) {
                 message: data.message,
             };
         });
-        console.log('management data:->', management)
         return NextResponse.json(management, { status: 200 });
     } catch (error: any) {
         console.log('error occured @ /api/v1/management/route.ts GET method:->', error.message);
