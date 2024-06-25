@@ -1,6 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
 const HeroVariants = {
@@ -27,20 +29,42 @@ const HeroVariants = {
 
 const navItemVariants = {
   hidden: {
-      opacity: 0,
-      x: -10,
+    opacity: 0,
+    x: -10,
   },
   visible: {
-      opacity: 1,
-      x: 0,
-      scale: 1
+    opacity: 1,
+    x: 0,
+    scale: 1
   },
   hover: {
-      scale: 1.1
+    scale: 1.1
   }
 }
 
 export default function Hero() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [topic, setTopic] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post('/api/v1/tech-talk', { name, email, topic });
+      toast.success(response.data.message);
+      setMessage(response.data.message);
+      setName('');
+      setEmail('');
+      setTopic('');
+    } catch (error: any) {
+      setMessage(error.response.data.message || 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="relative" >
       <motion.div className="h-[110vh] w-full" style={{ zIndex: 0, backgroundImage: "url('/assets/home-container.jpeg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat', }}
@@ -58,11 +82,21 @@ export default function Hero() {
         <motion.div variants={HeroVariants} className="bg-white p-5 rounded-lg mt-8 w-11/12 md:w-1/4 flex flex-col gap-2 md:mr-24 md:ml-16 ">
           <h3 className='text-3xl font-bold mt-5'>Inspire our students</h3>
           <p className='text-md text-gray-400 ' >If you wish to talk to our students, Share your details</p>
-          <label htmlFor="name" className='ml-1'>Name</label>
-          <input type="text" name="name" id="name" placeholder='Enter your Name' className='border p-3 rounded-lg' />
-          <label htmlFor="email" className='ml-1'>Email</label>
-          <input type="email" name="email" id="email" placeholder='Enter your Email' className='border p-3 rounded-lg' />
-          <button className="btn p-3 rounded-md bg-black text-white mt-3">Submit</button>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="name" className='ml-1 '>Name</label><br />
+            <input  type="text" name="name" id="name" value={name}
+              onChange={(e) => setName(e.target.value)} placeholder='Enter your Name' className='my-1 border p-3 rounded-lg w-full' /> <br />
+            <label htmlFor="email" className='ml-1 '>Email</label><br />
+            <input  type="email" name="email" id="email" value={email}
+              onChange={(e) => setEmail(e.target.value)} placeholder='Enter your Email' className='my-1 border p-3 rounded-lg w-full'  /> <br />
+            <label htmlFor="topic" className='ml-1 '>Topic</label><br />
+            <input  type="text" name="topic" value={topic}
+              onChange={(e) => setTopic(e.target.value)} id="topic" placeholder='Enter Topic' className='my-1 border p-3 rounded-lg w-full' /> <br />
+            {message && <p className='mt-3 text-center text-red-500'>{message}</p>}
+            <button className="btn p-3 rounded-md bg-black text-white mt-3" type="submit" disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit'}
+            </button>
+          </form>
         </motion.div>
       </motion.div>
     </section>

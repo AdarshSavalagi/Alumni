@@ -9,7 +9,7 @@ import ApproveReferrals from '@/Components/approve/Refferals';
 import ApproveTechTalks from '@/Components/approve/TechTalks';
 import TechTalks from '@/Components/admin/Techtalks';
 import Referrals from '@/Components/admin/Refferals';
-
+import DepartmentPage from '@/Components/admin/Department';
 
 interface ListItemProps {
     option: string;
@@ -42,6 +42,7 @@ const MainContent: React.FC = () => {
         'Referrals',
         'Office Bearers',
         'Management data',
+        'Departments'
     ];
     const approveOptions: string[] = [
         'Approve Alumnis',
@@ -91,6 +92,7 @@ const MainContent: React.FC = () => {
                 {selectedOption?.toLowerCase() === 'approve alumnis' ? <ApproveAlumni /> : null}
                 {selectedOption?.toLowerCase() === 'approve tech talks' ? <ApproveTechTalks /> : null}
                 {selectedOption?.toLowerCase() === 'approve referrals' ? <ApproveReferrals /> : null}
+                {selectedOption?.toLowerCase() === 'departments' ? <DepartmentPage /> : null}
 
 
             </div>

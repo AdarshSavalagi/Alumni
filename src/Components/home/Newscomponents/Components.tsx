@@ -38,7 +38,7 @@ export const TechTalkCard: React.FC<TechTalk> = ({ name, topic, date }) => {
         <div className="w-11/12 mx-auto bg-white shadow-md rounded-lg overflow-hidden mb-3">
             <div className="p-4">
                 <h3 className="text-xl font-semibold text-gray-800">{name || 'Title not available'}</h3>
-                <p className="text-gray-600 text-sm mt-2">{date || 'Date not available'}</p>
+                <p className="text-gray-600 text-sm mt-2">{date?.slice(0,10) || 'Date not available'}</p>
                 <p className="text-gray-700 mt-4">{topic || 'Topic not available'}</p>
             </div>
         </div>

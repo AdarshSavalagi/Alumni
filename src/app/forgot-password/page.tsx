@@ -5,27 +5,22 @@ import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {useRouter} from 'next/navigation';
 import Link from 'next/link';
-import { useAppContext } from '@/context/AlumniContext';
 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const {setIsLogin}=useAppContext();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('/api/v1/alumni/login', { email: email, password: password });
+      const response = await axios.post('/api/v1/admin/forgot-password', { email: email,});
       if (response.status !== 200) {
         throw new Error(response.data.message);
-        return;
       }
       toast.success(response.data.message);
-      setIsLogin(true);
-      router.push('/dashboard');
+      router.push('/login');
     } catch (error: any) {
       console.error(error);
       toast.error(error.message);
@@ -36,7 +31,6 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center ">
-      
       <AnimatePresence>
         <motion.div
           className="bg-white p-6 rounded-lg shadow-lg md:w-full w-11/12 max-w-md"
@@ -44,10 +38,10 @@ const LoginPage = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
         >
-          <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Alumni&apos;s Login</h2>
+          <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Forgot password</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700">Username</label>
+              <label htmlFor="email" className="block text-gray-700">email</label>
               <input
                 type="text"
                 id="email"
@@ -57,18 +51,8 @@ const LoginPage = () => {
                 required
               />
             </div>
-            <div className="mb-6">
-              <label htmlFor="password" className="block text-gray-700">Password</label>
-              <input
-                type="password"
-                id="password"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <Link href={'/forgot-password'} className='text-blue-800 pt-4'>Forgot Password</Link>
-            </div>
+            <Link href={'/login'} className='text-blue-700'>Login</Link>
+            
             <button
               type="submit"
               className={`w-full py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${loading ? 'bg-gray-400' : 'bg-purple-700 hover:bg-purple-800'} text-white`}
@@ -85,7 +69,7 @@ const LoginPage = () => {
                   Loading...
                 </motion.div>
               ) : (
-                'Login'
+                'send confirmation email'
               )}
             </button>
           </form>

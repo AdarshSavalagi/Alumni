@@ -20,7 +20,13 @@ const fetchTestimonials = async () => {
     return [];
   }
 };
-
+const renderStars = (rating: number) => {
+  const stars = [];
+  for (let i = 0; i < rating; i++) {
+      stars.push(<span key={i}>⭐</span>);
+  }
+  return stars;
+};
 const TestimonialItem = React.memo(({ testimonial }: { testimonial: Testimonial }) => (
   <div className="text-center p-4">
     <img
@@ -35,11 +41,7 @@ const TestimonialItem = React.memo(({ testimonial }: { testimonial: Testimonial 
       <i className="fas fa-quote-left pr-2"></i>{testimonial.text}
     </p>
     <ul className="list-unstyled flex justify-center text-yellow-500">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <li key={i}>
-          <i className={i < testimonial.rating ? "fas fa-star" : "far fa-star"}></i>
-        </li>
-      ))}
+ {   renderStars(testimonial.rating)}
     </ul>
   </div>
 ));
@@ -72,7 +74,7 @@ const TestimonialCarousel = () => {
       </motion.h1>
       <Slider {...settings}>
         {testimonials.map((testimonial, index) => (
-          <TestimonialItem key={testimonial.id || index} testimonial={testimonial} />
+          <TestimonialItem key={ index} testimonial={testimonial} />
         ))}
       </Slider>
     </div>

@@ -42,39 +42,39 @@ const EditModal: React.FC<{
                 <h2 className='text-xl font-bold mb-4'>{isNew ? 'Add New Office Bearer' : 'Edit Office Bearer Data'}</h2>
                 <label className='block mb-2'>
                     Name:
-                    <input 
-                        type="text" 
-                        name="name" 
-                        value={editData.name} 
-                        onChange={handleChange} 
+                    <input
+                        type="text"
+                        name="name"
+                        value={editData.name}
+                        onChange={handleChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
                 <label className='block mb-2'>
                     Designation:
-                    <input 
-                        type="text" 
-                        name="designation" 
-                        value={editData.designation} 
-                        onChange={handleChange} 
+                    <input
+                        type="text"
+                        name="designation"
+                        value={editData.designation}
+                        onChange={handleChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
                 <label className='block mb-2'>
                     Message:
-                    <textarea 
-                        name="message" 
-                        value={editData.message} 
-                        onChange={handleChange} 
+                    <textarea
+                        name="message"
+                        value={editData.message}
+                        onChange={handleChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
                 <label className='block mb-2'>
                     Photo:
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handlePhotoChange} 
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
                         className='border p-2 rounded w-full'
                     />
                 </label>
@@ -97,6 +97,7 @@ const OfficeBearers: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [currentEditData, setCurrentEditData] = useState<OfficeBearer | null>(null);
     const [isNew, setIsNew] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -106,6 +107,8 @@ const OfficeBearers: React.FC = () => {
             } catch (error: any) {
                 console.log('Error fetching data:', error.message);
                 toast.error('Error fetching data');
+            } finally {
+                setLoading(false);
             }
         };
         fetchData();
@@ -169,6 +172,10 @@ const OfficeBearers: React.FC = () => {
         setIsModalOpen(false);
     };
 
+    if (loading) return (<div className='flex justify-center items-center h-full'>
+        <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500'></div>
+    </div>)
+
     return (
         <div className='overflow-y-hidden p-4'>
             <h1 className='m-2 p-2 text-xl font-bold'>Office Bearers:</h1>
@@ -181,14 +188,14 @@ const OfficeBearers: React.FC = () => {
                         <p className='text-lg'>{data.designation}</p>
                         <p className='text-sm text-gray-500 text-center'>{data.message}</p>
                         <div className='flex'>
-                            <button 
-                                onClick={() => handleEditClick(data)} 
+                            <button
+                                onClick={() => handleEditClick(data)}
                                 className='mt-2 bg-blue-500 text-white p-2 rounded mr-2'
                             >
                                 Edit
                             </button>
-                            <button 
-                                onClick={() => handleDelete(data.name)} 
+                            <button
+                                onClick={() => handleDelete(data.name)}
                                 className='mt-2 bg-red-500 text-white p-2 rounded'
                             >
                                 Delete
@@ -198,11 +205,11 @@ const OfficeBearers: React.FC = () => {
                 ))}
             </div>
             {isModalOpen && currentEditData && (
-                <EditModal 
-                    data={currentEditData} 
-                    isNew={isNew} 
-                    onSave={handleSave} 
-                    onClose={handleCloseModal} 
+                <EditModal
+                    data={currentEditData}
+                    isNew={isNew}
+                    onSave={handleSave}
+                    onClose={handleCloseModal}
                 />
             )}
         </div>

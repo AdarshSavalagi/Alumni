@@ -4,9 +4,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {useRouter} from 'next/navigation';
-import Link from 'next/link';
 import { useAppContext } from '@/context/AlumniContext';
-
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -18,14 +16,13 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('/api/v1/alumni/login', { email: email, password: password });
+      const response = await axios.post('/api/v1/admin/login', { username: email, password: password });
       if (response.status !== 200) {
         throw new Error(response.data.message);
-        return;
       }
       toast.success(response.data.message);
       setIsLogin(true);
-      router.push('/dashboard');
+      router.push('/admin');
     } catch (error: any) {
       console.error(error);
       toast.error(error.message);
@@ -44,7 +41,7 @@ const LoginPage = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
         >
-          <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Alumni&apos;s Login</h2>
+          <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Admin Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700">Username</label>
@@ -67,7 +64,6 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <Link href={'/forgot-password'} className='text-blue-800 pt-4'>Forgot Password</Link>
             </div>
             <button
               type="submit"

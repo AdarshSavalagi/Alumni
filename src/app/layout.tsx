@@ -1,11 +1,9 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Footer from "@/Components/footer/Footer";
-import Navbar from "@/Components/navbar/Navbar";
-import {Toaster} from 'react-hot-toast';
 const inter = Inter({ subsets: ["latin"] });
-
+import { AppProvider } from '@/context/AlumniContext';
 
 export const metadata: Metadata = {
   title: "Alumni | Srinivas Institute of Technology",
@@ -18,15 +16,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+
     <html lang="en">
       <body className={inter.className} >
         <div className="h-screen overflow-y-auto scrollbar-thin" id="body">
-          <Navbar />
-          <Toaster />
-          {children}
-          <Footer />
+          <AppProvider>
+            {children}
+          </AppProvider>
         </div>
       </body>
     </html>
+
   );
 }

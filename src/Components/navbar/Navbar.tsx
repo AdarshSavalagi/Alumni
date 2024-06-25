@@ -52,20 +52,20 @@ const links = [
     link: "https://sitmng.ac.in"
   },
   {
-    name:'News',
-    link:'#news'
+    name: 'News',
+    link: '/#news'
   },
   {
-    name:'Career Opportunities',
-    link:'#news'
+    name: 'Career Opportunities',
+    link: '/#news'
   },
   {
-    name:'Tech Talks',
-    link:'#news'
+    name: 'Tech Talks',
+    link: '/#news'
   }
 ];
 
-export default function Navbar() {
+export default function Navbar(props: any) {
   const [showMenu, setShowMenu] = useState(false);
 
   const NavItem = ({ link, href }: { link: string, href: string }) => (
@@ -90,10 +90,14 @@ export default function Navbar() {
           <div className="w-2/3 hidden md:block my-auto">
             <ul className="flex flex-row justify-around h-full ">
               {links.map(link => <NavItem key={link.name} href={link.link} link={link.name} />)}
-              <li >
-                <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md border-black border px-5 mr-3">Sign In</motion.button>
-                <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md bg-black text-white">Join Now</motion.button>
-              </li>
+           
+             {!props.isLogin && <li >
+                <Link href={'/login'}> <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md border-black border px-5 mr-3">Sign In</motion.button></Link>
+                <Link href={'/signup'}> <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md bg-black text-white">Join Now</motion.button></Link>
+              </li>}
+              {props.isLogin &&<li >
+                <Link href={'/api/v1/logout'}> <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md bg-black text-white">Logout</motion.button></Link>
+              </li>}
             </ul>
           </div>
           <motion.div variants={navItemVariants} className="text-end w-12 justify-end md:hidden my-auto">
@@ -109,8 +113,9 @@ export default function Navbar() {
           </div>
           <ul className="flex flex-col mt-12 gap-5 divide-y" >
             {links.map(link => <NavItem key={link.name} href={link.link} link={link.name} />)}
-            <NavItem href="/login" link="Login" />
-            <NavItem href="/signup" link="Sign UP" />
+            {!props.isLogin && <NavItem href="/login" link="Login" />}
+            {!props.isLogin &&<NavItem href="/signup" link="Sign UP" />}
+            {props.isLogin &&<NavItem href="/api/v1/logout" link="Logout" />}
           </ul>
         </div>
       </motion.nav>

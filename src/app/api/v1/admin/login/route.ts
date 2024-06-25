@@ -3,19 +3,20 @@ import AdminModel from "@/models/admin";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-connect();
 
+connect();
 
 export async function POST(request:NextRequest){
     try {
         const {username, password} = await request.json();
-        const admin = await AdminModel.findOne({name:username});
+        const admin = await AdminModel.findOne({username:username});
         if(!admin) return NextResponse.json({message: 'Invalid username or password'},{status:400});
         const isMatch = await bcrypt.compare(password, admin.password);
         if(!isMatch) return NextResponse.json({message: 'Invalid username or password'},{status:400});
         const payload = {
             admin:{
-                id: admin._id
+                id: admin._id,
+                admin:true
             }
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET!, {expiresIn: 3600});

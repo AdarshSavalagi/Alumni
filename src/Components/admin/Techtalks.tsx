@@ -1,146 +1,144 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Dialog } from '@headlessui/react';
-import { TechTalk } from '@/types/TechTalk';
+import axios from 'axios';
 
+interface TechTalk {
+    id?: string;
+    name: string;
+    topic: string;
+    email: string;
+    date?: string;
+}
 
-const TechTalksGrid: React.FC = () => {
-  const [techTalks, setTechTalks] = useState<TechTalk[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedTalk, setSelectedTalk] = useState<TechTalk | null>(null);
-
-  const openModal = (talk: TechTalk) => {
-    setSelectedTalk(talk);
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    setSelectedTalk(null);
-  };
-
-  const handleDelete = (id: number) => {
-    setTechTalks(techTalks.filter(talk => talk.id !== id));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (selectedTalk) {
-      setSelectedTalk({
-        ...selectedTalk,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
-  const handleSave = () => {
-    if (selectedTalk) {
-      setTechTalks(techTalks.map(talk => talk.id === selectedTalk.id ? selectedTalk : talk));
-      closeModal();
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
-        {techTalks.map((talk) => (
-          <motion.div
-            key={talk.id}
-            className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer relative"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <div className="p-6">
-              <div className="text-xl font-medium text-black">{talk.name}</div>
-              <p className="text-gray-500">{talk.topic}</p>
-              <div className="mt-4 space-x-4">
-                <button
-                  className="px-4 py-2 bg-yellow-500 text-white rounded-md"
-                  onClick={() => openModal(talk)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded-md"
-                  onClick={() => handleDelete(talk.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <Dialog open={isOpen} onClose={closeModal} className="fixed z-10 inset-0 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen px-4">
-          <div className="fixed inset-0 bg-black opacity-30" />
-
-          <motion.div
-            className="bg-white rounded-lg max-w-md mx-auto p-6 z-20"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <Dialog.Title className="text-lg font-medium text-gray-900">
-              Edit Tech Talk
-            </Dialog.Title>
-            <form className="mt-4 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={selectedTalk?.name || ''}
-                  onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Topic
-                </label>
-                <input
-                  type="text"
-                  name="topic"
-                  value={selectedTalk?.topic || ''}
-                  onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  value={selectedTalk?.date || ''}
-                  onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
-            </form>
-            <div className="mt-6 space-x-4">
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                onClick={handleSave}
-              >
-                Save
-              </button>
-              <button
-                className="px-4 py-2 bg-gray-500 text-white rounded-md"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </Dialog>
-    </div>
-  );
+const fetchTechTalks = async () => {
+    const response = await axios.get<TechTalk[]>('/api/v1/tech-talk');
+    console.log(response.data)
+    return response.data;
 };
 
-export default TechTalksGrid;
+const createTechTalk = async (techTalk: TechTalk) => {
+    await axios.post('/api/v1/admin/approve/tech-talk', techTalk);
+};
+
+const updateTechTalk = async (techTalk: TechTalk) => {
+    await axios.put(`/api/v1/tech-talk?id=${techTalk.id}`, techTalk);
+};
+
+const deleteTechTalk = async (id: string) => {
+    await axios.delete(`/api/v1/tech-talk?id=${id}`);
+};
+
+const TechTalks: React.FC = () => {
+    const [techTalks, setTechTalks] = useState<TechTalk[]>([]);
+    const [currentTechTalk, setCurrentTechTalk] = useState<TechTalk>({ name: '', topic: '', email: '',date:'' });
+
+    useEffect(() => {
+        fetchTechTalks().then(setTechTalks);
+    }, []);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (currentTechTalk.id) {
+            console.log(currentTechTalk)
+            await updateTechTalk(currentTechTalk);
+        } else {
+            await createTechTalk(currentTechTalk);
+        }
+        setCurrentTechTalk({ name: '', topic: '', email: '',date:'' });
+        fetchTechTalks().then(setTechTalks);
+    };
+
+    const handleDelete = async (id: string) => {
+        await deleteTechTalk(id);
+        fetchTechTalks().then(setTechTalks);
+    };
+
+    return (
+        <section className="container mx-auto p-6">
+            <h1 className="text-3xl font-bold mb-6">Tech Talks</h1>
+            <form onSubmit={handleSubmit} className="mb-6 p-4 border rounded-lg bg-white shadow-md">
+                <div className="mb-4">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value={currentTechTalk.name}
+                        onChange={(e) => setCurrentTechTalk({ ...currentTechTalk, name: e.target.value })}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value={currentTechTalk.email}
+                        onChange={(e) => setCurrentTechTalk({ ...currentTechTalk, email: e.target.value })}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="topic" className="block text-sm font-medium text-gray-700">Topic</label>
+                    <input
+                        type="text"
+                        name="topic"
+                        id="topic"
+                        value={currentTechTalk.topic}
+                        onChange={(e) => setCurrentTechTalk({ ...currentTechTalk, topic: e.target.value })}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
+                    <input
+                        type="date"
+                        name="date"
+                        id="date"
+                        value={currentTechTalk.date}
+                        onChange={(e) => setCurrentTechTalk({ ...currentTechTalk, date: e.target.value })}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        required
+                    />
+                </div>
+                <button type="submit" className="btn p-3 rounded-md bg-black text-white mt-3">Submit</button>
+            </form>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {techTalks.map((techTalk) => (
+                    <motion.div
+                        key={techTalk.id}
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 border rounded-lg bg-white shadow-md"
+                    >
+                        <h3 className="text-xl font-bold">{techTalk.name}</h3>
+                        <p className="text-sm text-gray-500">{techTalk.email}</p>
+                        <p className="text-md mt-2">{techTalk.topic}</p>
+                        <p className="text-md mt-2">{techTalk.date?.slice(0,10)}</p>
+                        <div className="mt-4 flex justify-between">
+                            <button
+                                onClick={() => setCurrentTechTalk(techTalk)}
+                                className="btn p-2 rounded-md bg-blue-500 text-white"
+                            >
+                                Edit
+                            </button>
+                            <button
+                                onClick={() => handleDelete(techTalk.id!)}
+                                className="btn p-2 rounded-md bg-red-500 text-white"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+        </section>
+    );
+};
+
+export default TechTalks;

@@ -1,7 +1,7 @@
 import mongoose,{Schema} from 'mongoose';
 
 const adminSchema = new Schema({
-    name: String,
+    username: String,
     email: String,
     password: String
 });

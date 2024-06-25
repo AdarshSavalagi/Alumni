@@ -4,13 +4,14 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Alumni } from '@/types/Alumni';
+import { useAppContext } from '@/context/AlumniContext';
 
 
 
 
 
 const batches = ['', '2019', '2020', '2021'];
-const departments = ['', 'Computer Science', 'Mechanical Engineering', 'Electrical Engineering', 'Civil Engineering'];
+
 
 const StudentCard: React.FC<Alumni> = ({ name, batch, department, photo }) => (
     <motion.div
@@ -30,6 +31,7 @@ const AlumniPage: React.FC = () => {
     const [students, setStudents] = useState<Alumni[]>([]);
     const [selectedBatch, setSelectedBatch] = useState<string>('');
     const [selectedDepartment, setSelectedDepartment] = useState<string>('');
+    const {departments}=useAppContext();
 
     const handleBatchChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedBatch(e.target.value);
@@ -80,7 +82,8 @@ const AlumniPage: React.FC = () => {
                             onChange={handleDepartmentChange}
                             className="p-2 border rounded-md"
                         >
-                            {departments.map(department => <option key={department} value={department}>{department || 'All'}</option>)}
+                            <option value={''}>All</option>
+                            {departments.map(department => <option key={department.id} value={department.name}>{department.name || 'All'}</option>)}
                         </select>
                     </label>
                 </div>

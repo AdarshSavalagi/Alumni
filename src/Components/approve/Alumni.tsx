@@ -1,27 +1,65 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
-import { AlumniRegistrationRequest } from '@/types/Alumni';
+import { AlumniDashboard, AlumniRegistrationRequest } from '@/types/Alumni';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
 
-const initialRequests: AlumniRegistrationRequest[] = [
-  { id: 1, batch: '2020', usn: 'A123456', name: 'Alice Smith', linkedId: 'alice.smith', testimonials: 'Great experience at university!', ratings: 5, status: 'Pending', currentCompany: 'TechCorp' },
-  { id: 2, batch: '2019', usn: 'B654321', name: 'Bob Johnson', linkedId: 'bob.johnson', testimonials: 'Excellent program, highly recommend!', ratings: 4, status: 'Pending' },
-  { id: 3, batch: '2021', usn: 'C789012', name: 'Carol Lee', linkedId: 'carol.lee', testimonials: 'Fantastic support from faculty.', ratings: 5, status: 'Pending', currentCompany: 'SoftWorks' },
-  // Add more requests as needed
-];
+
 
 const AlumniRegistrationRequests: React.FC = () => {
-  const [requests, setRequests] = useState<AlumniRegistrationRequest[]>(initialRequests);
-  const [filteredRequests, setFilteredRequests] = useState<AlumniRegistrationRequest[]>(initialRequests);
+  const [requests, setRequests] = useState<AlumniDashboard[]>([]);
+  const [filteredRequests, setFilteredRequests] = useState<AlumniDashboard[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState<AlumniRegistrationRequest | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<AlumniDashboard | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [batchFilter, setBatchFilter] = useState<string | null>(null);
+  const [batchFilter, setBatchFilter] = useState<number | null>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const openModal = (request: AlumniRegistrationRequest) => {
+
+  const handleApprove = async (email: string) => {
+    try {
+      const response = await axios.post('/api/v1/admin/verifyAlumni', { email: email });
+      if (response.status !== 200) {
+        throw new Error(response.data);
+      }
+      toast.success(response.data.message);
+      const updatedRequests: AlumniDashboard[] = requests.map(request =>
+        request.email === email ? { ...request, status: 'Approved' } : request
+      );
+      setRequests(updatedRequests);
+      setFilteredRequests(updatedRequests);
+      fetchData();
+    } catch (error: any) {
+      toast.error(error.message);
+      console.log(error.message)
+    }
+  };
+
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('/api/v1/admin/approve/alumni');
+      if (response.status !== 200) {
+        console.log(response.data)
+      }
+      console.log(response.data)
+      setRequests(response.data);
+      setFilteredRequests(response.data)
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const openModal = (request: AlumniDashboard) => {
     setSelectedRequest(request);
     setIsOpen(true);
   };
@@ -31,49 +69,47 @@ const AlumniRegistrationRequests: React.FC = () => {
     setSelectedRequest(null);
   };
 
-  const handleDelete = (id: number) => {
-    const updatedRequests = requests.filter(request => request.id !== id);
+  const handleDelete = (email: string) => {
+    const updatedRequests = requests.filter(request => request.email !== email);
     setRequests(updatedRequests);
     setFilteredRequests(updatedRequests);
   };
 
-  const handleRead = (id: number) => {
-    const updatedRequests: AlumniRegistrationRequest[] = requests.map(request =>
-      request.id === id ? { ...request, status: 'Read' } : request
-    );
-    setRequests(updatedRequests);
-    setFilteredRequests(updatedRequests);
+
+
+
+
+
+  const handleEdit = async (editedRequest: AlumniDashboard) => {
+    try {
+      const response = await axios.put('/api/v1/admin/modify-alumni', editedRequest);
+      console.log(editedRequest)
+      if (response.status !== 200) {
+        throw new Error(response.data.message);
+        return;
+      }
+      toast.success(response.data.message);
+      const updatedRequests: AlumniDashboard[] = requests.map(request =>
+        request.email === editedRequest.email ? editedRequest : request
+      );
+      setRequests(updatedRequests);
+      setFilteredRequests(updatedRequests);
+      closeModal();
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error.message)
+    }
   };
-  
-  const handleApprove = (id: number) => {
-    const updatedRequests: AlumniRegistrationRequest[] = requests.map(request =>
-      request.id === id ? { ...request, status: 'Approved' } : request
-    );
-    setRequests(updatedRequests);
-    setFilteredRequests(updatedRequests);
-  };
-  
- 
-  
-  const handleEdit = (editedRequest: AlumniRegistrationRequest) => {
-    const updatedRequests: AlumniRegistrationRequest[] = requests.map(request =>
-      request.id === editedRequest.id ? editedRequest : request
-    );
-    setRequests(updatedRequests);
-    setFilteredRequests(updatedRequests);
-    closeModal(); // Close modal after editing
-  };
-  
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     const filtered = requests.filter(request =>
-      request.name.toLowerCase().includes(query.toLowerCase()) ||
-      request.usn.toLowerCase().includes(query.toLowerCase())
+      request.name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredRequests(filtered);
   };
 
-  const handleBatchFilter = (batch: string | null) => {
+  const handleBatchFilter = (batch: number | null) => {
     setBatchFilter(batch);
     if (batch) {
       const filtered = requests.filter(request => request.batch === batch);
@@ -85,10 +121,22 @@ const AlumniRegistrationRequests: React.FC = () => {
 
   const clearFilters = () => {
     setSearchQuery('');
-    setBatchFilter(null);
+    setBatchFilter(0);
     setFilteredRequests(requests);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <motion.div
+          className="border-t-4 border-b-4 border-blue-500 rounded-full w-16 h-16 animate-spin"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="mb-4 flex items-center justify-between">
@@ -101,8 +149,8 @@ const AlumniRegistrationRequests: React.FC = () => {
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
-            value={batchFilter || ''}
-            onChange={(e) => handleBatchFilter(e.target.value === '' ? null : e.target.value)}
+            value={batchFilter || 0}
+            onChange={(e) => handleBatchFilter(e.target.value === '0' ? null : parseInt(e.target.value))}
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Filter by Batch</option>
@@ -119,45 +167,45 @@ const AlumniRegistrationRequests: React.FC = () => {
           </button>
         </div>
       </div>
-      
+
       <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
         {filteredRequests.map((request) => (
           <motion.div
-            key={request.id}
-            className={`bg-white rounded-xl shadow-md overflow-hidden cursor-pointer relative border-l-4 ${request.status === 'Read' ? 'border-yellow-500' : request.status === 'Approved' ? 'border-green-500' : 'border-gray-300'}`}
+            key={request.email}
+            className={`bg-white rounded-xl shadow-md overflow-hidden cursor-pointer relative border-l-4 ${request.isVerified ? 'border-green-500' : 'border-red-500'}`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => openModal(request)}
+
           >
             <div className="p-6">
               <div className="text-xl font-medium text-black">{request.name}</div>
               <p className="text-gray-500">{`Batch: ${request.batch}`}</p>
-              <p className="text-gray-500">{`USN: ${request.usn}`}</p>
-              <p className="text-gray-500">{`LinkedIn: ${request.linkedId}`}</p>
-              <p className="text-gray-500">{`Testimonials: ${request.testimonials}`}</p>
-              <p className="text-gray-500">{`Ratings: ${request.ratings}`}</p>
-              {request.currentCompany && (
-                <p className="text-gray-500">{`Current Company: ${request.currentCompany}`}</p>
+              <p className="text-gray-500">{`LinkedIn: ${request.linkedin}`}</p>
+              <p className="text-gray-500">{`review: ${request.review}`}</p>
+              <p className="text-gray-500">{`rating: ${request.rating}`}</p>
+              {request.company && (
+                <p className="text-gray-500">{`Current Company: ${request.company}`}</p>
               )}
-              <p className={`mt-2 text-sm font-bold ${request.status === 'Read' ? 'text-yellow-500' : request.status === 'Approved' ? 'text-green-500' : 'text-gray-500'}`}>
-                {request.status}
+              <p className={`mt-2 text-sm font-bold ${request.isVerified ? 'border-green-500' : 'border-red-500'}`}>
+                {request.isVerified ? 'Verified' : 'Not Verified'}
               </p>
               <div className="mt-4 space-x-4">
-                <button
-                  className="px-4 py-2 bg-yellow-500 text-white rounded-md"
-                  onClick={() => handleRead(request.id)}
-                >
-                  Mark as Read
-                </button>
+
                 <button
                   className="px-4 py-2 bg-green-500 text-white rounded-md"
-                  onClick={() => handleApprove(request.id)}
+                  onClick={() => { handleApprove(request.email); }}
                 >
                   Approve
                 </button>
                 <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                  onClick={() => { openModal(request) }}
+                >
+                  Edit
+                </button>
+                <button
                   className="px-4 py-2 bg-red-500 text-white rounded-md"
-                  onClick={() => handleDelete(request.id)}
+                  onClick={() => handleDelete(request.email)}
                 >
                   Delete
                 </button>
@@ -196,52 +244,42 @@ const AlumniRegistrationRequests: React.FC = () => {
                   Batch
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   value={selectedRequest?.batch}
-                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, batch: e.target.value })}
+                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, batch: parseInt(e.target.value) })}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  USN
-                </label>
-                <input
-                  type="text"
-                  value={selectedRequest?.usn}
-                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, usn: e.target.value })}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                />
-              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   LinkedIn ID
                 </label>
                 <input
                   type="text"
-                  value={selectedRequest?.linkedId}
-                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, linkedId: e.target.value })}
+                  value={selectedRequest?.linkedin}
+                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, linkedin: e.target.value })}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Testimonials
+                  review
                 </label>
                 <textarea
-                  value={selectedRequest?.testimonials}
-                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, testimonials: e.target.value })}
+                  value={selectedRequest?.review}
+                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, review: e.target.value })}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Ratings
+                  rating
                 </label>
                 <input
                   type="number"
-                  value={selectedRequest?.ratings}
-                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, ratings: parseInt(e.target.value) })}
+                  value={selectedRequest?.rating}
+                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, rating: parseInt(e.target.value) })}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -251,8 +289,8 @@ const AlumniRegistrationRequests: React.FC = () => {
                 </label>
                 <input
                   type="text"
-                  value={selectedRequest?.currentCompany || ''}
-                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, currentCompany: e.target.value })}
+                  value={selectedRequest?.company || ''}
+                  onChange={(e) => setSelectedRequest({ ...selectedRequest!, company: e.target.value })}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>

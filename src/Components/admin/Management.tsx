@@ -3,6 +3,13 @@ import { ManagementPerson } from '@/types/Management';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
+
+const LoadingSpinner = () => (
+    <div className='flex justify-center items-center h-full'>
+        <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500'></div>
+    </div>
+);
 
 const EditModal: React.FC<{
     data: ManagementPerson;
@@ -37,8 +44,18 @@ const EditModal: React.FC<{
     };
 
     return (
-        <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75'>
-            <div className='bg-white p-6 rounded-lg shadow-lg'>
+        <motion.div
+            className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+        >
+            <motion.div
+                className='bg-white p-6 rounded-lg shadow-lg'
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.8 }}
+            >
                 <h2 className='text-xl font-bold mb-4'>Edit Management Data</h2>
                 <label className='block mb-2'>
                     Name:
@@ -87,13 +104,14 @@ const EditModal: React.FC<{
                     <button onClick={() => onSave(editData)} className='bg-blue-500 text-white p-2 rounded mr-2'>Save</button>
                     <button onClick={onClose} className='bg-gray-500 text-white p-2 rounded'>Cancel</button>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 
 const ManagementData: React.FC = () => {
     const [managementData, setManagementData] = useState<ManagementPerson[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [currentEditData, setCurrentEditData] = useState<ManagementPerson | null>(null);
 
@@ -136,7 +154,6 @@ const ManagementData: React.FC = () => {
     const handleDelete = async (name: string) => {
         try {
             await axios.delete(`/api/v1/management/?name=${name}`);
-            console.log(`/api/v1/management/?name=${name}`)
             setManagementData(prevData => prevData.filter(item => item.name !== name));
             toast.success('Management data deleted successfully');
         } catch (error) {
@@ -154,6 +171,7 @@ const ManagementData: React.FC = () => {
             try {
                 const response = await axios.get<ManagementPerson[]>('/api/v1/management');
                 setManagementData(response.data);
+                setLoading(false); // Set loading to false once data is fetched
             } catch (error) {
                 console.error('Error fetching data:', error);
                 toast.error('Error fetching data');
@@ -162,13 +180,24 @@ const ManagementData: React.FC = () => {
         fetchData();
     }, []);
 
+    if (loading) {
+        return <LoadingSpinner />;
+    }
+
     return (
         <div className='overflow-y-hidden p-4'>
             <h1 className='m-2 p-2 text-xl font-bold'>Management Data:</h1>
             <button onClick={handleAdd} className='mb-4 bg-green-500 text-white p-2 rounded'>Add New</button>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 {managementData.map((data, index) => (
-                    <div key={index} className='flex flex-col items-center justify-center m-3 p-3 shadow-lg rounded-lg'>
+                    <motion.div
+                        key={index}
+                        className='flex flex-col items-center justify-center m-3 p-3 shadow-lg rounded-lg bg-white'
+                        whileHover={{ scale: 1.05 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
                         <img src={data.image} alt={data.name} className='rounded-full w-24 h-24' />
                         <div className='font-bold text-md mt-2'>{data.name}</div>
                         <p className='text-lg'>{data.designation}</p>
@@ -187,7 +216,7 @@ const ManagementData: React.FC = () => {
                                 Delete
                             </button>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
             {isModalOpen && currentEditData && (

@@ -1,17 +1,9 @@
 
 export interface TechTalk {
-    id: number;
+    id: string;
     name: string;
     topic: string;
+    email:string
     date: string;
   }
 
-  export interface TechTalkRequest {
-    id: number;
-    name: string;
-    topic: string;
-    date: string;
-    studentBatch: string;
-    optionalMessage?: string;
-    status: 'Pending' | 'Read' | 'Approved';
-  }
