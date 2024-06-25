@@ -1,8 +1,10 @@
+'use client';
 import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { Testimonial } from '@/types/Testimonial';
 import axios from 'axios';
 
@@ -20,20 +22,23 @@ const fetchTestimonials = async () => {
     return [];
   }
 };
+
 const renderStars = (rating: number) => {
   const stars = [];
   for (let i = 0; i < rating; i++) {
-      stars.push(<span key={i}>⭐</span>);
+    stars.push(<span key={i}>⭐</span>);
   }
   return stars;
 };
+
 const TestimonialItem = React.memo(({ testimonial }: { testimonial: Testimonial }) => (
   <div className="text-center p-4">
-    <img
+    <Image
       src={testimonial.avatar}
       alt="avatar"
       className="rounded-full shadow-md mb-4 mx-auto"
-      style={{ width: '150px' }}
+      width={150}
+      height={150}
     />
     <h5 className="mb-2 text-xl font-semibold">{testimonial.name}</h5>
     <p className="text-gray-600 mb-2">{testimonial.role}</p>
@@ -41,11 +46,13 @@ const TestimonialItem = React.memo(({ testimonial }: { testimonial: Testimonial 
       <i className="fas fa-quote-left pr-2"></i>{testimonial.text}
     </p>
     <ul className="list-unstyled flex justify-center text-yellow-500">
- {   renderStars(testimonial.rating)}
+      {renderStars(testimonial.rating)}
     </ul>
   </div>
 ));
-/* eslint-disable react/display-name */
+
+TestimonialItem.displayName = 'TestimonialItem';
+
 const TestimonialCarousel = () => {
   const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
 
@@ -66,7 +73,7 @@ const TestimonialCarousel = () => {
     <div className="container mx-auto my-5 mb-10">
       <motion.h1
         variants={Container2Variants}
-        animate={'visible'}
+        animate="visible"
         initial="hidden"
         className="text-3xl font-normal md:font-semibold text-black mb-3 text-center md:text-5xl md:text-left"
       >
@@ -74,14 +81,14 @@ const TestimonialCarousel = () => {
       </motion.h1>
       <Slider {...settings}>
         {testimonials.map((testimonial, index) => (
-          <TestimonialItem key={ index} testimonial={testimonial} />
+          <TestimonialItem key={index} testimonial={testimonial} />
         ))}
       </Slider>
     </div>
   );
 };
-/* eslint-disable react/display-name */
-const TestimonialPage= React.memo(TestimonialCarousel);
-/* eslint-disable react/display-name */
-TestimonialPage.displayName='TestimonialPage'
+
+const TestimonialPage = React.memo(TestimonialCarousel);
+TestimonialPage.displayName = 'TestimonialPage';
+
 export default TestimonialPage;
