@@ -45,7 +45,7 @@ const TestimonialItem = React.memo(({ testimonial }: { testimonial: Testimonial 
     </ul>
   </div>
 ));
-
+/* eslint-disable react/display-name */
 const TestimonialCarousel = () => {
   const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
 
@@ -80,7 +80,8 @@ const TestimonialCarousel = () => {
     </div>
   );
 };
-
+/* eslint-disable react/display-name */
 const TestimonialPage= React.memo(TestimonialCarousel);
+/* eslint-disable react/display-name */
 TestimonialPage.displayName='TestimonialPage'
 export default TestimonialPage;
