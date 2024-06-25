@@ -81,4 +81,6 @@ const TestimonialCarousel = () => {
   );
 };
 
-export default React.memo(TestimonialCarousel);
+const TestimonialPage= React.memo(TestimonialCarousel);
+TestimonialPage.displayName='TestimonialPage'
+export default TestimonialPage;
