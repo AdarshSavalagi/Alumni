@@ -41,8 +41,8 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ message: 'Login first' }, { status: 404 });
         }
 
-        const decoded = jwt.decode(userToken) as { email?: string };
-        const email = decoded?.email;
+        const decoded = jwt.decode(userToken) as { id?: string };
+        const email = decoded?.id;
 
         if (!email) {
             return NextResponse.json({ message: 'Email not found in token' }, { status: 400 });
@@ -75,8 +75,8 @@ export async function DELETE(req: NextRequest) {
         if (!userToken) {
             return NextResponse.json({ message: 'Login first' }, { status: 404 });
         }
-        const decodedToken = jwt.decode(userToken) as { admin?: {id?:string,admin?:boolean}};
-        if (decodedToken?.admin?.admin !== true) {
+        const decodedToken:any = jwt.verify(userToken,process.env.JWT_SECRET!);
+        if (!decodedToken?.admin) {
             return NextResponse.json({ message: 'Admin not found' }, { status: 404 });
         }
 

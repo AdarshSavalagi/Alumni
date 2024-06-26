@@ -22,7 +22,7 @@ const AlumniRegistrationRequests: React.FC = () => {
 
   const handleApprove = async (email: string) => {
     try {
-      const response = await axios.post('/api/v1/admin/verifyAlumni', { email: email });
+      const response = await axios.post('/api/v1/admin/approve/alumni', { email: email });
       if (response.status !== 200) {
         throw new Error(response.data);
       }

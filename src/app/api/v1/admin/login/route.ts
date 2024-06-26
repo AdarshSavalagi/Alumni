@@ -14,14 +14,18 @@ export async function POST(request:NextRequest){
         const isMatch = await bcrypt.compare(password, admin.password);
         if(!isMatch) return NextResponse.json({message: 'Invalid username or password'},{status:400});
         const payload = {
-            admin:{
-                id: admin._id,
-                admin:true
-            }
+            admin:true,
+            id:admin._id
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET!, {expiresIn: 3600});
         const response = NextResponse.json({message: 'Log in successfully'},{status:200});
         response.cookies.set('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 3600
+        });
+        response.cookies.set('admin','1',{
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',

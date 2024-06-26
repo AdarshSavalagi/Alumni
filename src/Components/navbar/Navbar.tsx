@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useAppContext } from "@/context/AlumniContext";
 
 const NavBarVariants = {
   hidden: {
@@ -65,12 +66,18 @@ const links = [
   }
 ];
 
-export default function Navbar(props: any) {
+export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
-
+  const {isAdmin,isLogin}=useAppContext();
+  const handleLogout=()=>{
+    'use client';
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
   const NavItem = ({ link, href }: { link: string, href: string }) => (
     <motion.li variants={navItemVariants} whileHover='hover' className="my-auto">
-      <Link href={href}>{link}</Link>
+      <Link href={href} >{link}</Link>
     </motion.li>
   );
 
@@ -89,15 +96,15 @@ export default function Navbar(props: any) {
           </motion.div>
           <div className="w-2/3 hidden md:block my-auto">
             <ul className="flex flex-row justify-around h-full ">
-              {links.map(link => <NavItem key={link.name} href={link.link} link={link.name} />)}
+              {!isAdmin && links.map(link => <NavItem key={link.name} href={link.link} link={link.name} />)}
            
-             {!props.isLogin && <li >
+             {!isLogin && <li >
                 <Link href={'/login'}> <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md border-black border px-5 mr-3">Sign In</motion.button></Link>
                 <Link href={'/signup'}> <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md bg-black text-white">Join Now</motion.button></Link>
               </li>}
-              {props.isLogin &&<li >
-                <Link href={'/api/v1/logout'}> <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md bg-black text-white">Logout</motion.button></Link>
-              </li>}
+              {isLogin &&<li >
+            <a onClick={handleLogout}>    <Link href={'/api/v1/logout'}> <motion.button variants={navItemVariants} whileHover='hover' className="btn p-3 rounded-md bg-black text-white">Logout</motion.button></Link>
+            </a>        </li>}
             </ul>
           </div>
           <motion.div variants={navItemVariants} className="text-end w-12 justify-end md:hidden my-auto">
@@ -112,10 +119,10 @@ export default function Navbar(props: any) {
             <span className="text-end font-extrabold bg-gray-300 rounded-full m-3  p-3 text-white" onClick={() => setShowMenu(!showMenu)}><svg height="15px" id="Layer_1" version="1.1" viewBox="0 0 512 512" width="12px" xmlns="http://www.w3.org/2000/svg"><path d="M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z" /></svg></span>
           </div>
           <ul className="flex flex-col mt-12 gap-5 divide-y" >
-            {links.map(link => <NavItem key={link.name} href={link.link} link={link.name} />)}
-            {!props.isLogin && <NavItem href="/login" link="Login" />}
-            {!props.isLogin &&<NavItem href="/signup" link="Sign UP" />}
-            {props.isLogin &&<NavItem href="/api/v1/logout" link="Logout" />}
+            {!isAdmin && links.map(link => <NavItem key={link.name} href={link.link} link={link.name} />)}
+            {!isLogin && <NavItem href="/login" link="Login" />}
+            {!isLogin &&<NavItem href="/signup" link="Sign UP" />}
+            {isLogin &&<a onClick={handleLogout}> <NavItem href="/api/v1/logout" link="Logout" /> </a>}
           </ul>
         </div>
       </motion.nav>

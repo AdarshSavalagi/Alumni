@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: 'Invalid password' }, { status: 401 });
         }
 
-        const tokenData = { email };
+        const tokenData = { id:email,admin:false };
         const secret = process.env.JWT_SECRET;
 
         if (!secret) {
@@ -37,6 +37,12 @@ export async function POST(request: NextRequest) {
         const token = jwt.sign(tokenData, secret, { expiresIn: '1h' });
 
         const response = NextResponse.json({ message: 'Logged in successfully' }, { status: 200 });
+        response.cookies.set('admin','0',{
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 3600
+        });
         response.cookies.set('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 3600 });
 
         return response;

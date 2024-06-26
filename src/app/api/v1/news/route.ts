@@ -7,13 +7,13 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
     try {
         const newsData: NewsDataType[] = [
-            {
-                id: 1,
-                title: 'News 1',
-                message: 'Message 1',
-                imageUrl: 'https://via.placeholder.com/150',
-                date: '2021-08-01',
-            },
+            // {
+            //     id: 1,
+            //     title: 'News 1',
+            //     message: 'Message 1',
+            //     imageUrl: 'https://via.placeholder.com/150',
+            //     date: '2021-08-01',
+            // },
         ];
         return NextResponse.json(newsData, { status: 200 });
     } catch (error: any) {

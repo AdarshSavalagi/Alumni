@@ -16,7 +16,7 @@ const TechTalkRequests: React.FC = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get('/api/v1/admin/approve/tech-talk');
-        setRequests(res.data);
+        setRequests(res.data||[]);
       } catch (error: any) {
         toast.error(error.message);
         console.log(error)

@@ -103,7 +103,7 @@ const AlumniData: React.FC = () => {
 
     const filterAlumni = () => {
         let filtered = alumniData.filter(alumni =>
-            alumni.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            alumni.name?.toLowerCase().includes(searchTerm.toLowerCase()) &&
             (filterDepartment === '' || alumni.department === filterDepartment) &&
             (filterBatch === 0 || alumni.batch === filterBatch)
         );

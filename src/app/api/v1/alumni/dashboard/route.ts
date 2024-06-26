@@ -13,8 +13,8 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ message: 'Login first' }, { status: 404 });
         }
 
-        const decoded = jwt.decode(userToken) as { email?: string };
-        const email = decoded?.email;
+        const decoded:any = jwt.verify(userToken,process.env.JWT_SECRET!);
+        const email = decoded.id;
 
         if (!email) {
             return NextResponse.json({ message: 'Email not found in token' }, { status: 400 });

@@ -8,18 +8,18 @@ export async function GET(req: NextRequest) {
     try {
 
         const fetchedCareerData: CareerType[] = [
-            {
-                id: 1,
-                companyName: 'Example Company A',
-                message: 'Nullam id nulla nec nulla pretium dapibus non in tellus.',
-                date: 'June 15, 2024',
-            },
-            {
-                id: 2,
-                companyName: 'Example Company B',
-                message: 'Duis quis magna a nunc vestibulum euismod.',
-                date: 'June 18, 2024',
-            },
+            // {
+            //     id: 1,
+            //     companyName: 'Example Company A',
+            //     message: 'Nullam id nulla nec nulla pretium dapibus non in tellus.',
+            //     date: 'June 15, 2024',
+            // },
+            // {
+            //     id: 2,
+            //     companyName: 'Example Company B',
+            //     message: 'Duis quis magna a nunc vestibulum euismod.',
+            //     date: 'June 18, 2024',
+            // },
         ];
         return NextResponse.json(fetchedCareerData, { status: 200 });
     } catch (error: any) {

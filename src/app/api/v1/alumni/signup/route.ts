@@ -19,7 +19,8 @@ export async function POST(req:NextRequest){
         const alumni = new Alumni({email:email,password:hashedPassword,isVerified:false});
         alumni.save();
         const tokenData={
-            email:email
+            id:email,
+            admin:false
         }
         const token = await jwt.sign(tokenData,process.env.JWT_SECRET!);
         const response = NextResponse.json({message:"User created successfully"},{status:200});

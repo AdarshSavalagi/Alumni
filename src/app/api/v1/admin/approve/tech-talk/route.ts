@@ -1,7 +1,6 @@
 import { connect } from "@/dfConfig/dbConfig";
 import TechTalk from "@/models/techtalk";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
 import { TechTalk as TechTalkType } from "@/types/TechTalk";
 connect();
 
@@ -28,15 +27,6 @@ export async function GET(req: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const token = request.cookies.get('token')?.value || '';
-        const secret = process.env.JWT_SECRET;
-        if (!secret) throw new Error('JWT secret not configured');
-        const decodedToken = jwt.verify(token, secret) as { admin?: boolean };
-        
-        if (!decodedToken.admin) {
-            return NextResponse.json({ message: 'Admin not found' }, { status: 403 });
-        }
-
         const { name, email, topic, date } = await request.json();
         const techtalk = new TechTalk({ name:name, email:email, topic:topic,date:date,isVerified:true });
         

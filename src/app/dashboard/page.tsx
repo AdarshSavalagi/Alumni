@@ -4,13 +4,13 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { AlumniDashboard } from '@/types/Alumni';
-
+import { useAppContext } from '@/context/AlumniContext';
 
 const AlumniEdit = () => {
     const [alumni, setAlumni] = useState<AlumniDashboard | null>(null);
     const [formData, setFormData] = useState<AlumniDashboard | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-
+    const { departments } = useAppContext();
 
     useEffect(() => {
         const fetchAlumniData = async () => {
@@ -28,22 +28,22 @@ const AlumniEdit = () => {
         fetchAlumniData();
     }, []);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prevState => (prevState ? { ...prevState, [name]: value } : null));
+        setFormData(prevState => (prevState ? { ...prevState, [name]: value } : { [name]: value } as unknown as AlumniDashboard));
     };
 
     const handleSave = async () => {
         try {
             if (formData) {
-                const response = await axios.put('/api/v1/alumni', { ...formData },);
+                const response = await axios.put('/api/v1/alumni', { ...formData });
                 setAlumni(formData);
                 setIsEditing(false);
                 toast.success(response.data.message);
             }
         } catch (error: any) {
             console.error('Error saving alumni data:', error);
-            toast.error('Error saving alumni data:', error.message);
+            toast.error(`Error saving alumni data: ${error.message}`);
         }
     };
 
@@ -57,7 +57,6 @@ const AlumniEdit = () => {
                     transition={{ duration: 0.5 }}
                     className="p-4 bg-white rounded-lg shadow-md"
                 >
-                    {/* <p className='font-bold '>Verfied:{alumni.isVerified?<span className="text-green-900">done</span>:<span className="text-red-600"> Not yet</span>}</p> */}
                     {isEditing ? (
                         <>
                             <div className="flex flex-col items-center">
@@ -144,15 +143,17 @@ const AlumniEdit = () => {
                                     />
                                 </div>
                                 <div>
-                                    it will be dropdown
                                     <label className="block text-sm font-medium text-gray-700">Department</label>
-                                    <input
-                                        type="text"
+                                    <select
                                         name="department"
                                         value={formData?.department || ''}
                                         onChange={handleInputChange}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                                    />
+                                        className='border p-2 rounded mr-4'
+                                    >
+                                        {departments.map((obj) => (
+                                            <option key={obj.id} value={obj.name}>{obj.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Rating</label>
@@ -177,7 +178,6 @@ const AlumniEdit = () => {
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                     />
                                 </div>
-
                             </div>
                             <div className="mt-4 text-center">
                                 <button
@@ -196,38 +196,82 @@ const AlumniEdit = () => {
                         </>
                     ) : (
                         <>
-                            <div className="flex flex-col items-center">
-                                <img src={alumni.photo} alt={alumni.name} className="rounded-full w-32 h-32 mb-4" />
-                                <p className="text-lg font-semibold mb-2">{alumni.name} </p>
+                      <div className="container mx-auto p-4">
+    <h1 className="text-2xl font-bold mb-4 text-center">Alumni Profile</h1>
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="p-6 bg-white rounded-lg shadow-md flex flex-col md:flex-row items-center md:items-start"
+    >
+        <div className="flex-shrink-0 md:mr-6 flex justify-center md:justify-start w-32 h-32 md:w-48 md:h-48 mb-4 md:mb-0">
+            <img src={alumni.photo} alt={alumni.name} className="rounded-full w-full h-full object-cover border-2 border-gray-300" />
+        </div>
+        <div className="flex-grow w-full">
+            <div className="text-center md:text-left mb-4">
+                <h2 className="text-xl font-semibold mb-2">{alumni.name}</h2>
+                <div className="relative inline-block group mb-4">
+                    <span className={`indicator ${alumni.isVerified ? 'text-green-500' : 'text-yellow-500'}`}>
+                        Verification Status: {alumni.isVerified ? 'Verified ✔️ ' : 'Pending ⏳'}
+                    </span>
+                </div>
+                <p className="text-gray-600 mb-2">{alumni.position} at {alumni.company}</p>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="w-full text-left table-auto">
+                    <tbody>
+                        <tr className="border-t border-gray-200">
+                            <td className="font-medium p-2">Batch:</td>
+                            <td className="p-2">{alumni.batch}</td>
+                        </tr>
+                        <tr className="border-t border-gray-200">
+                            <td className="font-medium p-2">Email:</td>
+                            <td className="p-2">{alumni.email}</td>
+                        </tr>
+                        <tr className="border-t border-gray-200">
+                            <td className="font-medium p-2">Phone:</td>
+                            <td className="p-2">{alumni.phone}</td>
+                        </tr>
+                        <tr className="border-t border-gray-200">
+                            <td className="font-medium p-2">Address:</td>
+                            <td className="p-2">{alumni.address}</td>
+                        </tr>
+                        <tr className="border-t border-gray-200">
+                            <td className="font-medium p-2">LinkedIn:</td>
+                            <td className="p-2">
+                                <a href={alumni.linkedin} className="text-blue-500">{alumni.linkedin}</a>
+                            </td>
+                        </tr>
+                        <tr className="border-t border-gray-200">
+                            <td className="font-medium p-2">Department:</td>
+                            <td className="p-2">{alumni.department}</td>
+                        </tr>
+                        <tr className="border-t border-gray-200">
+                            <td className="font-medium p-2">Rating:</td>
+                            <td className="p-2">{alumni.rating}</td>
+                        </tr>
+                        <tr className="border-t border-b border-gray-200">
+                            <td className="font-medium p-2">Review:</td>
+                            <td className="p-2">{alumni.review}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div className="mt-4 text-center md:text-left">
+                <button
+                    onClick={() => setIsEditing(true)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                >
+                    Edit Profile
+                </button>
+            </div>
+        </div>
+    </motion.div>
+</div>
 
+                    </>
+                    
 
-                                <div className="relative inline-block group">
-                                    <span className={`indicator ${alumni.isVerified ? 'text-green-500' : 'text-yellow-500'}`}>
-                                        Verification Status:  {alumni.isVerified ? 'Verified ✔️ ' : 'Pending ⏳'}
-                                    </span>
-
-                                </div>
-                                <p className="text-gray-600 mb-4">{alumni.position} at {alumni.company}</p>
-                            </div>
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                <p><strong>Batch:</strong> {alumni.batch}</p>
-                                <p><strong>Email:</strong> {alumni.email}</p>
-                                <p><strong>Phone:</strong> {alumni.phone}</p>
-                                <p><strong>Address:</strong> {alumni.address}</p>
-                                <p><strong>LinkedIn:</strong> <a href={alumni.linkedin} className="text-blue-500">{alumni.linkedin}</a></p>
-                                <p><strong>Department:</strong> {alumni.department}</p>
-                                <p><strong>Rating:</strong> {alumni.rating}</p>
-                                <p><strong>Review:</strong> {alumni.review}</p>
-                            </div>
-                            <div className="mt-4 text-center">
-                                <button
-                                    onClick={() => setIsEditing(true)}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                                >
-                                    Edit Profile
-                                </button>
-                            </div>
-                        </>
                     )}
                 </motion.div>
             ) : (
