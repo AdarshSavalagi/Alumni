@@ -21,7 +21,7 @@ const MainComponent: React.FC = () => {
     const fetchData = async () => {
         try {
             const response = await axios.get('/api/v1/department');
-            console.log(response.data)
+          
             setData(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);

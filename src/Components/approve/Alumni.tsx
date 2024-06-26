@@ -43,10 +43,7 @@ const AlumniRegistrationRequests: React.FC = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get('/api/v1/admin/approve/alumni');
-      if (response.status !== 200) {
-        console.log(response.data)
-      }
-      console.log(response.data)
+     
       setRequests(response.data);
       setFilteredRequests(response.data)
     } catch (error: any) {
@@ -83,7 +80,7 @@ const AlumniRegistrationRequests: React.FC = () => {
   const handleEdit = async (editedRequest: AlumniDashboard) => {
     try {
       const response = await axios.put('/api/v1/admin/modify-alumni', editedRequest);
-      console.log(editedRequest)
+    
       if (response.status !== 200) {
         throw new Error(response.data.message);
         return;

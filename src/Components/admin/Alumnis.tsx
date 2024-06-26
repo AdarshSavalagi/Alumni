@@ -20,7 +20,7 @@ const AlumniData: React.FC = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('/api/v1/alumni');
-                console.log(response.data)
+            
                 setAlumniData(response.data);
             } catch (error: any) {
                 console.log('Error occurred while fetching alumni data:->', error.message);
@@ -43,12 +43,11 @@ const AlumniData: React.FC = () => {
     const handleSave = async (updatedData: AlumniDashboard) => {
 
         try {
-            console.log(updatedData)
             const response = await axios.put('/api/v1/admin/modify-alumni', updatedData);
-            console.log(response.data);
+          
             if (response.status !== 200) {
                 toast.error('Error occurred while updating data');
-                console.log(response.data)
+                
                 return;
             }
             toast.success('Data updated successfully');
@@ -69,10 +68,10 @@ const AlumniData: React.FC = () => {
 
         try {
             const response = await axios.delete(`/api/v1/alumni?email=${email}`);
-            console.log(response.data);
+   
             if (response.status !== 200) {
                 toast.error('Error occurred while deleting data');
-                console.log(response.data)
+             
                 return;
             }
             toast.success('Data deleted successfully');

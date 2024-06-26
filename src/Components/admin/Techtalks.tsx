@@ -13,7 +13,7 @@ interface TechTalk {
 
 const fetchTechTalks = async () => {
     const response = await axios.get<TechTalk[]>('/api/v1/tech-talk');
-    console.log(response.data)
+
     return response.data;
 };
 
@@ -40,7 +40,6 @@ const TechTalks: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (currentTechTalk.id) {
-            console.log(currentTechTalk)
             await updateTechTalk(currentTechTalk);
         } else {
             await createTechTalk(currentTechTalk);

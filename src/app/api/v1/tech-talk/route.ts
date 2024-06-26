@@ -54,7 +54,7 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ message: 'Invalid ID' }, { status: 400 });
         }
 
-        console.log(`ID: ${id}`);
+        
         
         const techtalk = await TechTalkModel.findByIdAndDelete(id);
 

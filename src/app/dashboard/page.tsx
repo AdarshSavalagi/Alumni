@@ -21,9 +21,7 @@ const AlumniEdit = () => {
             } catch (error: any) {
                 console.error('Error fetching alumni data:', error);
                 toast.error('Error fetching alumni data:', error.message);
-            } finally {
-                console.log("Alumni data fetched");
-            }
+            } 
         };
         fetchAlumniData();
     }, []);
