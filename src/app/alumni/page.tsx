@@ -5,12 +5,14 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Alumni } from '@/types/Alumni';
 import { useAppContext } from '@/context/AlumniContext';
+import { loadBindings } from 'next/dist/build/swc';
 
 
+const currentYear: number = new Date().getFullYear();
+
+const batches: string[] = [''].concat(Array.from({ length: currentYear - 1994 }, (_, index) => (currentYear - index).toString()));
 
 
-
-const batches = ['', '2019', '2020', '2021'];
 
 
 const StudentCard: React.FC<Alumni> = ({ name, batch, department, photo }) => (
@@ -31,7 +33,8 @@ const AlumniPage: React.FC = () => {
     const [students, setStudents] = useState<Alumni[]>([]);
     const [selectedBatch, setSelectedBatch] = useState<string>('');
     const [selectedDepartment, setSelectedDepartment] = useState<string>('');
-    const {departments}=useAppContext();
+    const { departments } = useAppContext();
+    const [loading, setLoading] = useState(true);
 
     const handleBatchChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedBatch(e.target.value);
@@ -43,10 +46,10 @@ const AlumniPage: React.FC = () => {
 
     const filteredStudents = useMemo(() => students.filter((student) => {
         return (
-            (selectedBatch === '' || student.batch === parseInt(selectedBatch)) &&
+            (selectedBatch === '' || student.batch === selectedBatch) &&
             (selectedDepartment === '' || student.department === selectedDepartment)
         );
-    }), [selectedBatch, selectedDepartment,students]);
+    }), [selectedBatch, selectedDepartment, students]);
 
 
     useEffect(() => {
@@ -57,10 +60,18 @@ const AlumniPage: React.FC = () => {
             } catch (error: any) {
                 console.log(error.message);
                 toast.error('Failed to fetch students');
+            }finally{
+                setLoading(false);
             }
         }
         fetchStudents();
     }, []);
+
+    if (loading) {
+        return <div className='flex justify-center items-center h-full'>
+            <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500'></div>
+        </div>
+    }
     return (
         <div className="flex justify-center p-5 mx-auto relative">
             <div className="w-full max-w-7xl">

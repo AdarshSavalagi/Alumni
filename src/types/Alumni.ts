@@ -12,7 +12,7 @@ export interface AlumniRegistrationRequest {
 
   export interface Alumni {
     name: string;
-    batch: number;
+    batch: string;
     department: string;
     photo: string;
 }

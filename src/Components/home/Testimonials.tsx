@@ -31,6 +31,8 @@ const renderStars = (rating: number) => {
   return stars;
 };
 
+
+
 const TestimonialItem = React.memo(({ testimonial }: { testimonial: Testimonial }) => (
   <div className="text-center p-4">
     <Image
@@ -55,9 +57,10 @@ TestimonialItem.displayName = 'TestimonialItem';
 
 const TestimonialCarousel = () => {
   const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetchTestimonials().then(setTestimonials);
+    fetchTestimonials().then(setTestimonials).then(() => setLoading(false));
   }, []);
 
   const settings = React.useMemo(() => ({
@@ -68,6 +71,14 @@ const TestimonialCarousel = () => {
     slidesToScroll: 1,
     swipeToSlide: true,
   }), []);
+
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center h-[60vh]">
+            <div>Loading...</div>
+        </div>
+    );
+}
 
   return (
     <div className="container mx-auto my-5 mb-10">

@@ -39,8 +39,23 @@ const Container: React.FC = () => {
         fetchData();
     }, []);
 
-    if (data.loading) return <p>Loading...</p>;
-    if (data.error) return <p>Error: {data.error}</p>;
+  
+    if (data.loading) {
+        return (
+            <div className="flex items-center justify-center h-[60vh]">
+                <div>Loading...</div>
+            </div>
+        );
+    }
+    if (data.loading) {
+        return (
+            <div className="flex items-center justify-center h-[60vh]">
+                <div>Error: {data.error}</div>
+            </div>
+        );
+    }
+    
+   
 
     return (
         <div className="w-11/12 mx-auto flex flex-col md:h-[80vh] md:flex-row gap-4" id='news'>
