@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -17,13 +17,20 @@ const Container2Variants = {
 
 export default function OfficeBearers() {
   const [officeBearerData, setOfficeBearerData] = React.useState<OfficeBearer[]>([]);
+  const [isLoading,setIsLoading]=useState<boolean>(true);
   React.useEffect(() => {
     axios.get('/api/v1/office-bearer').then((res) => {
       setOfficeBearerData(res.data);
-    }).catch((err) => {
+    }).then(()=>setIsLoading(false)).catch((err) => {
       toast.error('Failed to fetch data');
     });
   }, []);
+
+  if(isLoading){
+    return  <div className="flex items-center justify-center h-[80vh]">
+    <div>Loading...</div>
+</div>
+  }
 
   return (
     <section>

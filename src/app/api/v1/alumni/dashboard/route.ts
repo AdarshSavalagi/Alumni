@@ -1,4 +1,5 @@
 import { connect } from "@/dfConfig/dbConfig";
+import { AlumniVerify } from "@/helpers/AlumniVerify";
 import AlumniModel from "@/models/alumni";
 import { AlumniDashboard } from "@/types/Alumni";
 import jwt from 'jsonwebtoken';
@@ -8,19 +9,12 @@ connect();
 
 export async function GET(req: NextRequest) {
     try {
-        const userToken = req.cookies.get('token')?.value;
-        if (!userToken) {
-            return NextResponse.json({ message: 'Login first' }, { status: 404 });
-        }
+        const token = req.cookies.get('token')?.value;
+        if (!token) return NextResponse.json({ message: 'Unauthenticated' }, { status: 401 });
+        const validate = await AlumniVerify(token);
+        if (!validate.alumni) return NextResponse.json({ message: 'Invalid token' }, { status: 401 });       
 
-        const decoded:any = jwt.verify(userToken,process.env.JWT_SECRET!);
-        const email = decoded.id;
-
-        if (!email) {
-            return NextResponse.json({ message: 'Email not found in token' }, { status: 400 });
-        }
-
-        const alumni = await AlumniModel.findOne({ email }).lean() as AlumniDashboard;
+        const alumni = await AlumniModel.findById({ _id:validate.id }).lean() as AlumniDashboard;
         if (!alumni) {
             return NextResponse.json({ message: 'Alumni not found' }, { status: 404 });
         }

@@ -57,7 +57,19 @@ const alumniSchema = new Schema({
     forgotPasswordToken: {
         type: String,
         default: ''
-    }
+    },
+    forgotPasswordTokenExpiry: {
+        type: Date,
+        default: Date.now()
+    },
+    token: {
+        type: String,
+        default: ''
+    },
+    tokenExpiry: {
+        type: Date,
+        default: Date.now()
+    },
 });
 
 const Alumni = mongoose.models.alumni || mongoose.model('alumni', alumniSchema);

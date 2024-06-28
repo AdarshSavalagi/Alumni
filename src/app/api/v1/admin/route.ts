@@ -3,11 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 import Alumni from "@/models/alumni";
 import Management from "@/models/management";
 import OfficeBearers from "@/models/officeBearers"; 
+import { AdminVerify } from "@/helpers/AdminVerify";
 
 connect();
 
 export async function GET(req: NextRequest) {
     try {
+        const token = req.cookies.get('token')?.value;
+        if (!token) return NextResponse.json({ message: 'Unauthenticated' }, { status: 401 });
+        const validate = await AdminVerify(token);
+        if (!validate.admin) return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+        
       const response = await Alumni.aggregate([
             {
                 $facet: {

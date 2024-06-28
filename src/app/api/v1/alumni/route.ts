@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dfConfig/dbConfig";
 import AlumniModel from "@/models/alumni";
 import jwt from 'jsonwebtoken';
+import { AlumniVerify } from "@/helpers/AlumniVerify";
+import { AdminVerify } from "@/helpers/AdminVerify";
 
 connect();
 
@@ -41,21 +43,20 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ message: 'Login first' }, { status: 404 });
         }
 
-        const decoded = jwt.decode(userToken) as { id?: string };
-        const email = decoded?.id;
-
-        if (!email) {
-            return NextResponse.json({ message: 'Email not found in token' }, { status: 400 });
+        const validate = await AlumniVerify(userToken);
+        if (!validate.alumni) {
+            return NextResponse.json({ message: 'Alumni not found' }, { status: 404 });
         }
 
+        
         const {
             name, batch, phone, address,
             company, position, photo, linkedin,
             department, rating, review
         } = await req.json();
 
-        const updatedAlumni = await AlumniModel.findOneAndUpdate(
-            { email },
+        const updatedAlumni = await AlumniModel.findByIdAndUpdate(
+            { _id: validate.id},
             { name, batch, phone, address, company, position, photo: photo, linkedin, department, rating, review, isVerified: false },
             { new: true }
         );
@@ -71,14 +72,11 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
     try {
-        const userToken = req.cookies.get('token')?.value;
-        if (!userToken) {
-            return NextResponse.json({ message: 'Login first' }, { status: 404 });
-        }
-        const decodedToken:any = jwt.verify(userToken,process.env.JWT_SECRET!);
-        if (!decodedToken?.admin) {
-            return NextResponse.json({ message: 'Admin not found' }, { status: 404 });
-        }
+        const token = req.cookies.get('token')?.value;
+        if (!token) return NextResponse.json({ message: 'Unauthenticated' }, { status: 401 });
+        const validate = await AdminVerify(token);
+        if (!validate.admin) return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+        
 
         const email = req.nextUrl.searchParams.get('email');
         if (!email) {

@@ -2,11 +2,16 @@ import { connect } from "@/dfConfig/dbConfig";
 import TechTalk from "@/models/techtalk";
 import { NextRequest, NextResponse } from "next/server";
 import { TechTalk as TechTalkType } from "@/types/TechTalk";
+import { AdminVerify } from "@/helpers/AdminVerify";
 connect();
 
 
 export async function GET(req: NextRequest) {
     try {
+        const token = req.cookies.get('token')?.value;
+        if (!token) return NextResponse.json({ message: 'Unauthenticated' }, { status: 401 });
+        const validate = await AdminVerify(token);
+        if (!validate.admin) return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
         const response = await TechTalk.find({ isVerified: false });
         const data:TechTalkType[] = response.map((obj)=>{
             return {
@@ -27,6 +32,11 @@ export async function GET(req: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const token = request.cookies.get('token')?.value;
+        if (!token) return NextResponse.json({ message: 'Unauthenticated' }, { status: 401 });
+        const validate = await AdminVerify(token);
+        if (!validate.admin) return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+        
         const { name, email, topic, date } = await request.json();
         const techtalk = new TechTalk({ name:name, email:email, topic:topic,date:date,isVerified:true });
         

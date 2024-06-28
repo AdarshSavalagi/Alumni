@@ -17,7 +17,7 @@ export default function Home() {
       <main>
         <Container2 />
         <OfficeBearers />
-        <HrTag />
+ 
         <Container3 />
         <NewsComponent />
         <Testimonials />
